@@ -1,5 +1,6 @@
 package servlets;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,6 +8,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -23,6 +25,9 @@ public class controller extends HttpServlet implements HttpSessionListener {
     private PrintWriter _writer = null;
     private BufferedInputStream _reader = null;
     private ServletContext sc;
+    private String typeLogin;
+    private ArrayList<String> _arrayOfArg = new ArrayList<>();
+
 
     @Override
     public void init() throws ServletException {
@@ -41,33 +46,182 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Do Post ");
+        //System.out.println("Do Post ");
         process(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Do Get ");
+        //System.out.println("Do Get ");
         process(req, resp);
-
     }
+
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        ServletContext sc = getServletContext();
         String action = req.getParameter("action");
+        sc.log("-- valeur de action = " + action);
+
         if(action == null) {
             resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/"));
         } else {
             switch (action) {
-                case "login":
+                case "LOGIN_VERIFY":
+                    System.out.println("Dans LOGIN_VERIFY");
+                    sc.log("LOGIN_VERIFY");
 
+                    // 1. Recup num login entre :
+                    int num_client = Integer.parseInt(req.getParameter("numcli"));
+                    System.out.println("Num recupere de page login: " + num_client);
+
+                    // 2. Definir type login "old_client"
+                    typeLogin = "OLD_CLIENT";
+
+                    // 3. Envoyer requete au serveur_compagnie pour verif num client
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add(String.valueOf(num_client));
+                    String requestLV = MakeRequest("LOGIN_VERIFY", _arrayOfArg );
+                    String responseLV = SendRequest(requestLV);
+                    System.out.println("Reponse serveur : *" + responseLV + "*");
+                    AnalyseReponse("LOGIN_VERIFY",responseLV, req, resp);
+
+                    break;
+                case "LOGIN_NEW":
+                    System.out.println("Dans LOGIN_NEW");
+
+                    // 1. Definir type login "new_client"
+                    typeLogin = "NEW_CLIENT";
+
+                    // 2. Redirect sur formulaire :
+                    RequestDispatcher rdLN = sc.getRequestDispatcher("/formulaire_login.jsp");
+                    sc.log("-- Tentative de redirection sur formulaire_login.jsp");
+                    rdLN.forward(req, resp);
+
+
+                    break;
+                case "LOGIN_NEW_FORM" :
+                    System.out.println("Dans LOGIN_NEW_FORM");
+                    String nom_client = req.getParameter("nomcli");
+                    String prenom_client = req.getParameter("prenomcli");
+                    String adr_client = req.getParameter("adrcli");
+                    String email_client = req.getParameter("emailcli");
+                    System.out.println("Info recupere de formulaire login: " + nom_client + ", " + prenom_client + ", " + adr_client + ", " + email_client);
+
+                    // traiter informations, recuperer numclient du serveur
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add(nom_client);
+                    _arrayOfArg.add(prenom_client);
+                    _arrayOfArg.add(adr_client);
+                    _arrayOfArg.add(email_client);
+                    String requestLNF = MakeRequest("LOGIN_GENERATE", _arrayOfArg );
+                    System.out.println("Requete : " + requestLNF);
+                    String responseLNF = SendRequest(requestLNF);
+                    System.out.println("Reponse serveur : *" + responseLNF + "*");
+                    AnalyseReponse("LOGIN_GENERATE", responseLNF, req, resp);
+
+                    break;
+                case "ACHATS" :
+                    System.out.println("Dans ACHATS");
+
+
+                    break;
+                case "PROMO" :
+                    System.out.println("Dans PROMO");
+
+
+                    break;
+                case "TERMINER" :
+                    System.out.println("Dans TERMINER");
+
+                    // 1. Old client - terminer session, retour page login
+                    RequestDispatcher rdT2 = sc.getRequestDispatcher("/fin_session.jsp");
+                    sc.log("-- Tentative de redirection sur fin_session.jsp");
+                    rdT2.forward(req, resp);
+
+
+                    break;
+//                case "TERMINER_FORM" :
+//                    System.out.println("Dans TERMINER_FORM");
+//
+//                    // 1. Terminer session, retour page login
+//                    RequestDispatcher rdTF = sc.getRequestDispatcher("/fin_session.jsp");
+//                    sc.log("-- Tentative de redirection sur fin_session.jsp");
+//                    rdTF.forward(req, resp);
+//
+//                    break;
+                default:
+                    System.out.println("Requete inconnue");
                     break;
             }
         }
     }
 
 
-    @Override
+    private void AnalyseReponse(String cmd, String response, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        String reponse_commande = "";
+
+        String tokfull = response.replaceAll(".$", "");
+        String[] tok = tokfull.split(_separator);
+        String rep = tok[0];
+        System.out.println(rep);
+
+        switch(cmd)
+        {
+            case "LOGIN_VERIFY":
+                if(rep.equals("ACK")) {
+
+                    // aller dans menu
+                    // TODO : passer numClient à la page menu
+
+                    RequestDispatcher rdLV1 = sc.getRequestDispatcher("/menu.jsp");
+                    System.out.println("Client trouve");
+                    System.out.println("-- Tentative de redirection sur menu.jsp");
+                    sc.log("-- Tentative de redirection sur menu.jsp");
+                    rdLV1.forward(req, resp);
+                } else {
+
+                    // num client existe pas
+                    // TODO : dire au client que numClient n'exste pas
+                    RequestDispatcher rdLV2 = sc.getRequestDispatcher("/login.jsp");
+                    System.out.println("Ce numero de client n'existe pas");
+                    System.out.println("-- Tentative de redirection sur login.jsp");
+                    sc.log("-- Tentative de redirection sur login.jsp");
+                    rdLV2.forward(req, resp);
+                }
+
+                break;
+            case "LOGIN_GENERATE" :
+                if(rep.equals("ACK"))
+                {
+                    // recuperer numclient du serveur
+                    String numCliGen = tok[1];
+
+                    // rediriger sur menu
+                    // TODO : passer numCliGen à la page menu
+
+                    RequestDispatcher rdLNF = sc.getRequestDispatcher("/menu.jsp");
+                    sc.log("-- Tentative de redirection sur menu.jsp");
+                    System.out.println("-- Tentative de redirection sur menu.jsp");
+                    rdLNF.forward(req, resp);
+                }
+
+                break;
+            case "A" :
+
+
+                break;
+            case "B" :
+
+
+                break;
+            default:
+                response = "Commande inconnue";
+                break;
+        }
+    }
+
+        @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
 
     }
@@ -82,14 +236,55 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
         try {
             _connexion = new Socket(_host, _port);
-            _separator = ";";
-            _endOfLine = "#";
-            sc.log("Connect to server");
+            //_separator = ";";
+            //_endOfLine = "#";
+            sc.log("Connected to server");
+            System.out.println("Connected to server");
+
+            _writer = new PrintWriter(_connexion.getOutputStream(), true);
+            _reader = new BufferedInputStream(_connexion.getInputStream());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String SendRequest(String request) throws IOException {
+
+        _writer.write(request);
+        _writer.flush();
+
+        System.out.println("Commande [" + request + "] envoyée au serveur");
+
+        //On attend la réponse
+        String response = read();
+        System.out.println("\t * " + response + " : Réponse reçue " + response);
+
+        return response;
+    }
+
+    private String MakeRequest(String cmd, ArrayList<String> arrayOfArg) {
+        String request = cmd;
+
+        for(String str : arrayOfArg) {
+            request += _separator + str;
+        }
+
+        request += _endOfLine;
+
+
+        return request;
+    }
+
+    //Méthode pour lire les réponses du serveur
+    private String read() throws IOException{
+        String response = "";
+        int stream;
+        byte[] b = new byte[4096];
+        stream = _reader.read(b);
+        response = new String(b, 0, stream);
+        return response;
     }
 
     public void readPropertyFile(){
@@ -100,9 +295,9 @@ public class controller extends HttpServlet implements HttpSessionListener {
         try
         {
             System.getProperty("user.dir");
-            _InStream = new FileInputStream("D:\\Workspace\\Web_CheckIn\\resources\\config.properties");
+            // recup user.dir
+            _InStream = new FileInputStream("C:\\Users\\stasy\\Desktop\\RTI\\Labo\\Evaluation3\\Web_CheckIn\\resources\\config.properties");
             _propFile.load(_InStream);
-
             _port = Integer.parseInt(_propFile.getProperty("PORT"));
             _host = _propFile.getProperty("HOST");
             _separator = _propFile.getProperty("SEPARATOR");

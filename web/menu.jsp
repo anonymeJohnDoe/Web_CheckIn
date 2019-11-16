@@ -19,17 +19,17 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-6">
-                    <form method="POST" action="ControlServlet">
+                    <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                         <h3>
                             MENU
                         </h3>
-                        <button type="button" class="btn btn-success" name="action" value="Achats">
+                        <button type="submit" class="btn btn-success" name="action" value="ACHATS">
                             Achats
                         </button>
-                        <button type="button" class="btn btn-success" name="action" value="Promo">
+                        <button type="submit" class="btn btn-success" name="action" value="PROMO">
                             Promotions à ne pas rater
                         </button>
-                        <button type="button" class="btn btn-secondary" name="action" value="Terminer">
+                        <button type="submit" class="btn btn-secondary" name="action" value="TERMINER">
                             Terminer session
                         </button>
                         <!-- si Button marche pas, remplacer par Input -->

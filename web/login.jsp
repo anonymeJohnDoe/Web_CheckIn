@@ -11,14 +11,24 @@
     <title>Login</title>
 </head>
 <body>
-<H3>*** Identification ***</H3>
-<P>Veuillez vous identifer :
-    <BR><BR>
-    <form method="POST" action="ControlServlet">
-        <P>User : <input type="text" name="user" size=20 value="stan"></P>
-        <P>Pass : <input type="password" name="pass" size=20 value="lee"></P>
-        <P><input type="hidden" name="action" size=20 value="Login"></P>
-        <P><input type="submit" value="Let's go"></P>
-    </form>
+<H3>*** Login ***</H3>
+<P>Bonjour !
+<P>Veuiller entrer votre numero de client :
+<BR><BR>
+<form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
+
+    <P>Client ID : <input type="text" name="numcli" size=20 value=""></P>
+    <P><button type="submit" class="btn btn-success" name="action" value="LOGIN_VERIFY">
+        Login
+    </button>
+    <button type="submit" class="btn btn-secondary" name="action" value="LOGIN_NEW">
+        Obtenir un nouveau
+    </button></P>
+<%--        <P>Pass : <input type="password" name="pass" size=20 value="lee"></P>--%>
+<%--        <P><input type="hidden" name="action" size=20 value="LOGIN"></P>--%>
+<%--        <P><input type="submit" name="action" value="Verifier ID">--%>
+<%--        <input type="submit" name="action" value="Obtenir un nouveau"></P>--%>
+
+</form>
 </body>
 </html>

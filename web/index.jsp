@@ -9,13 +9,12 @@
 <html>
   <head>
     <title>Bienvenue muchachos</title>
-    <!--meta http-equiv="refresh" content="0; url=http://example.com/" /-->
-    <script type="text/javascript">
-      window.location.href = "login.jsp"
-    </script>
+    <meta http-equiv="refresh" content="0; url=login.jsp" />
+<%--    <script type="text/javascript">--%>
+<%--      window.location.href = "login.jsp"--%>
+<%--    </script>--%>
   </head>
   <body>
   <h1>Redirection automatique... (<a href="login.jsp">click me</a>)</h1>
-  <!--p>To invoke the java servlet click <a href="ControlServlet">here</a></p-->
   </body>
 </html>
