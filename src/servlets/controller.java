@@ -8,7 +8,9 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -94,9 +96,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     typeLogin = "NEW_CLIENT";
 
                     // 2. Redirect sur formulaire :
-                    RequestDispatcher rdLN = sc.getRequestDispatcher("/formulaire_login.jsp");
-                    sc.log("-- Tentative de redirection sur formulaire_login.jsp");
-                    rdLN.forward(req, resp);
+                    redirectSurPage("formulaire_login.jsp", req, resp);
+
 
 
                     break;
@@ -124,6 +125,27 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 case "ACHATS" :
                     System.out.println("Dans ACHATS");
 
+                    // 1. Rediriger sur page achats
+                    redirectSurPage("achats.jsp", req, resp);
+
+
+                    break;
+                case "ACHATS_DATE_CH" :
+                    System.out.println("Dans ACHATS_DATE_CH");
+
+                    String datetrnf = req.getParameter("datetr");
+                    System.out.println("Date choisie par le client : " + datetrnf);
+
+                    // transformer date en format bd :
+                    String datetr = changeFormatStringDate(datetrnf);
+                    System.out.println("Date format correct : " + datetr);
+
+                    // TODO : envoyer requete au serveur : chercher les traversees pour date donnee
+
+
+                    break;
+                case "ACHATS_RET_MENU" :
+                    redirectSurPage("achats.jsp", req, resp);
 
                     break;
                 case "PROMO" :
@@ -134,11 +156,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 case "TERMINER" :
                     System.out.println("Dans TERMINER");
 
-                    // 1. Old client - terminer session, retour page login
-                    RequestDispatcher rdT2 = sc.getRequestDispatcher("/fin_session.jsp");
-                    sc.log("-- Tentative de redirection sur fin_session.jsp");
-                    rdT2.forward(req, resp);
-
+                    // 1. Old client - terminer session, retour page fin_session->login
+                    redirectSurPage("fin_session.jsp", req, resp);
 
                     break;
 //                case "TERMINER_FORM" :
@@ -173,21 +192,17 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     // aller dans menu
                     // TODO : passer numClient à la page menu
-
-                    RequestDispatcher rdLV1 = sc.getRequestDispatcher("/menu.jsp");
                     System.out.println("Client trouve");
-                    System.out.println("-- Tentative de redirection sur menu.jsp");
-                    sc.log("-- Tentative de redirection sur menu.jsp");
-                    rdLV1.forward(req, resp);
+
+                    redirectSurPage("menu.jsp", req, resp);
+
                 } else {
 
                     // num client existe pas
                     // TODO : dire au client que numClient n'exste pas
-                    RequestDispatcher rdLV2 = sc.getRequestDispatcher("/login.jsp");
                     System.out.println("Ce numero de client n'existe pas");
-                    System.out.println("-- Tentative de redirection sur login.jsp");
-                    sc.log("-- Tentative de redirection sur login.jsp");
-                    rdLV2.forward(req, resp);
+
+                    redirectSurPage("login.jsp", req, resp);
                 }
 
                 break;
@@ -200,10 +215,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     // rediriger sur menu
                     // TODO : passer numCliGen à la page menu
 
-                    RequestDispatcher rdLNF = sc.getRequestDispatcher("/menu.jsp");
-                    sc.log("-- Tentative de redirection sur menu.jsp");
-                    System.out.println("-- Tentative de redirection sur menu.jsp");
-                    rdLNF.forward(req, resp);
+                    redirectSurPage("menu.jsp", req, resp);
                 }
 
                 break;
@@ -308,7 +320,25 @@ public class controller extends HttpServlet implements HttpSessionListener {
         } catch (IOException e) {
             System.err.println("Error Reading Properties Files [" + e + "]");
         }
+    }
 
+    private String changeFormatStringDate(String old_date) //2000-12-31
+    {
+        //String dateR = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        String anneeS = old_date.substring(0, 4);
+        String moisS = old_date.substring(5, 7);
+        String jourS = old_date.substring(8, 10);
+        String new_date = jourS + "/" + moisS + "/" + anneeS;
+
+        return new_date;
+    }
+
+    private void redirectSurPage(String filename, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+    {
+        RequestDispatcher rd = sc.getRequestDispatcher("/" + filename);
+        sc.log("-- Tentative de redirection sur " + filename);
+        System.out.println("-- Tentative de redirection sur " + filename);
+        rd.forward(req, resp);
     }
 
 
