@@ -11,6 +11,7 @@
     <title>Login</title>
 </head>
 <body>
+<div style="text-align: center;">
 <H3>*** Login ***</H3>
 <P>Bonjour !
 <P>Veuiller entrer votre numero de client :
@@ -30,5 +31,6 @@
 <%--        <input type="submit" name="action" value="Obtenir un nouveau"></P>--%>
 
 </form>
+</div>
 </body>
 </html>

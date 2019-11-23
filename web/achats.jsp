@@ -1,11 +1,16 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: stasy
-  Date: 17/11/2019
-  Time: 15:08
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.ArrayList" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%  ArrayList<String> listTrav = new ArrayList<>(); %>
+<%  ArrayList<String> listHorair = new ArrayList<>(); %>
+<%  ArrayList<String> listDest = new ArrayList<>(); %>
+<%  String action = (String)session.getAttribute("action"); %>
+
+
+<% %>
+<% %>
+
 <html>
 <head>
     <title>Reservation traversee</title>
@@ -43,96 +48,56 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div style="text-align: center;">
-
+                            <P></P>
+                            <h3>
+                                Reserver une traversee
+                            </h3>
                             <table class="table">
                                 <thead>
                                 <tr>
                                     <th>
-                                        #
+                                        Code Traversee
                                     </th>
                                     <th>
-                                        Product
+                                        Heure de depart
                                     </th>
                                     <th>
-                                        Payment Taken
-                                    </th>
-                                    <th>
-                                        Status
+                                        Destination
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    <%-- Boucle : afficher les  traversees --%>
+                                    <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
 
-        <%--                        <tr>--%>
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        TB - Monthly
-                                    </td>
-                                    <td>
-                                        01/04/2012
-                                    </td>
-                                    <td>
-                                        Default
-                                    </td>
-                                </tr>
-                                <tr class="table-active">
-                                    <td>
-                                        1
-                                    </td>
-                                    <td>
-                                        TB - Monthly
-                                    </td>
-                                    <td>
-                                        01/04/2012
-                                    </td>
-                                    <td>
-                                        Approved
-                                    </td>
-                                </tr>
-                                <tr class="table-success">
-                                    <td>
-                                        2
-                                    </td>
-                                    <td>
-                                        TB - Monthly
-                                    </td>
-                                    <td>
-                                        02/04/2012
-                                    </td>
-                                    <td>
-                                        Declined
-                                    </td>
-                                </tr>
-                                <tr class="table-warning">
-                                    <td>
-                                        3
-                                    </td>
-                                    <td>
-                                        TB - Monthly
-                                    </td>
-                                    <td>
-                                        03/04/2012
-                                    </td>
-                                    <td>
-                                        Pending
-                                    </td>
-                                </tr>
-                                <tr class="table-danger">
-                                    <td>
-                                        4
-                                    </td>
-                                    <td>
-                                        TB - Monthly
-                                    </td>
-                                    <td>
-                                        04/04/2012
-                                    </td>
-                                    <td>
-                                        Call in to confirm
-                                    </td>
-                                </tr>
+                                        <% int nbTrav = (int)session.getAttribute("nbTrav"); %>
+                                        <% listTrav = (ArrayList<String>) session.getAttribute("listTrav");%>
+                                        <% listHorair = (ArrayList<String>) session.getAttribute("listHorair");%>
+                                        <% listDest = (ArrayList<String>) session.getAttribute("listDest");%>
+
+                                        <% for( int i=0; i< nbTrav; i++) { %>
+                                            <tr class="table-active">
+                                                <td>
+                                                    <%=listTrav.get(i) %>
+                                                </td>
+                                                <td>
+                                                    <%=listHorair.get(i) %>
+                                                </td>
+                                                <td>
+                                                    <%=listDest.get(i) %>
+                                                </td>
+                                            </tr>
+                                        <% } %>
+                                    <% } else {%>
+                                    <tr class="table-active">
+                                        <td>
+                                            Veuillez choisir une date où il y a des traversees enregistrees
+                                        </td>
+                                    </tr>
+                                    <% } %>
+
+
+
                                 </tbody>
                             </table>
                         </div>

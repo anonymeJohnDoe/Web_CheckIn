@@ -61,6 +61,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        HttpSession session = req.getSession(true);
         ServletContext sc = getServletContext();
         String action = req.getParameter("action");
         sc.log("-- valeur de action = " + action);
@@ -83,10 +84,10 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     // 3. Envoyer requete au serveur_compagnie pour verif num client
                     _arrayOfArg.clear();
                     _arrayOfArg.add(String.valueOf(num_client));
-                    String requestLV = MakeRequest("LOGIN_VERIFY", _arrayOfArg );
+                    String requestLV = MakeRequest("LOGIN_VERIFY", _arrayOfArg, false);
                     String responseLV = SendRequest(requestLV);
                     System.out.println("Reponse serveur : *" + responseLV + "*");
-                    AnalyseReponse("LOGIN_VERIFY",responseLV, req, resp);
+                    AnalyseReponse("LOGIN_VERIFY",responseLV, req, resp, session);
 
                     break;
                 case "LOGIN_NEW":
@@ -115,17 +116,17 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     _arrayOfArg.add(prenom_client);
                     _arrayOfArg.add(adr_client);
                     _arrayOfArg.add(email_client);
-                    String requestLNF = MakeRequest("LOGIN_GENERATE", _arrayOfArg );
+                    String requestLNF = MakeRequest("LOGIN_GENERATE", _arrayOfArg, false);
                     System.out.println("Requete : " + requestLNF);
                     String responseLNF = SendRequest(requestLNF);
                     System.out.println("Reponse serveur : *" + responseLNF + "*");
-                    AnalyseReponse("LOGIN_GENERATE", responseLNF, req, resp);
+                    AnalyseReponse("LOGIN_GENERATE", responseLNF, req, resp, session);
 
                     break;
                 case "ACHATS" :
                     System.out.println("Dans ACHATS");
 
-                    // 1. Rediriger sur page achats
+                    // Rediriger sur page achats
                     redirectSurPage("achats.jsp", req, resp);
 
 
@@ -136,16 +137,27 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     String datetrnf = req.getParameter("datetr");
                     System.out.println("Date choisie par le client : " + datetrnf);
 
-                    // transformer date en format bd :
+                    // Transformer date en format bd :
                     String datetr = changeFormatStringDate(datetrnf);
                     System.out.println("Date format correct : " + datetr);
 
-                    // TODO : envoyer requete au serveur : chercher les traversees pour date donnee
+                    // Envoyer requete au serveur : chercher les traversees pour date donnee
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add(datetr);
+                    String requestADC = MakeRequest("ACHATS_LISTE_TRAV_RECH", _arrayOfArg, true);
+                    System.out.println("Requete : " + requestADC);
+                    String responseADC = SendRequest(requestADC);
+                    System.out.println("Reponse serveur : *" + responseADC + "*");
+                    AnalyseReponse("ACHATS_LISTE_TRAV_RECH", responseADC, req, resp, session);
 
 
                     break;
                 case "ACHATS_RET_MENU" :
-                    redirectSurPage("achats.jsp", req, resp);
+                    System.out.println("Dans ACHATS_RET_MENU");
+
+                    // Rediriger sur page menu
+                    redirectSurPage("menu.jsp", req, resp);
+
 
                     break;
                 case "PROMO" :
@@ -177,7 +189,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
     }
 
 
-    private void AnalyseReponse(String cmd, String response, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    private void AnalyseReponse(String cmd, String response, HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, IOException{
         String reponse_commande = "";
 
         String tokfull = response.replaceAll(".$", "");
@@ -219,8 +231,48 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 }
 
                 break;
-            case "A" :
+            case "ACHATS_LISTE_TRAV_RECH" :
+                if(rep.equals("ACK"))
+                {
+                    // 0. recuperer le nombre de donnees-traversees recues
+                    int nbTravALTR = Integer.parseInt(tok[1]);
+                    System.out.println("Nombre traversees trouvees pour la date : " + nbTravALTR);
 
+
+                    // 1. boucle : creer liste idtraversees, horaires, destinations
+                    ArrayList<String> listTravALTR = new ArrayList<>();
+                    ArrayList<String> listHorairALTR = new ArrayList<>();
+                    ArrayList<String> listDestALTR = new ArrayList<>();
+
+                    System.out.println("Liste de traversees pour la date :");
+                    for (int i=0, i_tr=2, i_hor=3, i_des=4; i<nbTravALTR; i++, i_tr+=3, i_hor+=3, i_des+=3)
+                    {
+                        listTravALTR.add(tok[i_tr]);
+                        listHorairALTR.add(tok[i_hor]);
+                        listDestALTR.add(tok[i_des]);
+
+                        System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des]);
+                    }
+
+                    // 2. Sauvegarder liste dans objet session
+                    session.setAttribute("nbTrav", nbTravALTR);
+                    session.setAttribute("listTrav", listTravALTR);
+                    session.setAttribute("listHorair", listHorairALTR);
+                    session.setAttribute("listDest", listDestALTR);
+
+
+                    // 3. Redirect sur achats
+                    session.setAttribute("action","ACHATS_LISTE_TRAV_TROUV");
+                    redirectSurPage("achats.jsp", req, resp);
+
+                }
+                else
+                {
+                    System.out.println("Pas de traversees trouvees");
+                    // Redirect sur achats
+                    session.setAttribute("action","ACHATS_LISTE_TRAV_VIDE");
+                    redirectSurPage("achats.jsp", req, resp);
+                }
 
                 break;
             case "B" :
@@ -276,15 +328,18 @@ public class controller extends HttpServlet implements HttpSessionListener {
         return response;
     }
 
-    private String MakeRequest(String cmd, ArrayList<String> arrayOfArg) {
+    private String MakeRequest(String cmd, ArrayList<String> arrayOfArg, boolean EBOOP) {
+
         String request = cmd;
 
         for(String str : arrayOfArg) {
             request += _separator + str;
         }
+        if(EBOOP) {
+            request += _separator + "EBOOP";
+        }
 
         request += _endOfLine;
-
 
         return request;
     }

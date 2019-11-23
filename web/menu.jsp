@@ -11,6 +11,8 @@
     <title>Menu</title>
 </head>
 <body>
+<div style="text-align: center;">
+
 
 <div class="container-fluid">
     <div class="row">
@@ -41,6 +43,6 @@
         </div>
     </div>
 </div>
-
+</div>
 </body>
 </html>

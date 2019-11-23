@@ -11,6 +11,7 @@
     <title>Vos informations</title>
 </head>
 <body>
+<div style="text-align: center;">
 <H3>*** Vos informations ***</H3>
 <P>
 <P>Veuiller entrer les informations additionnelles :
@@ -28,5 +29,6 @@
     </button></P>
 
 </form>
+</div>
 </body>
 </html>

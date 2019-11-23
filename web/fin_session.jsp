@@ -12,6 +12,7 @@ page <html>
     <title>Merci pour votre visite</title>
 </head>
 <body>
+<div style="text-align: center;">
 <H3>*** Merci pour votre visite ! ***</H3>
 <P>
 <P>Redirection sur la page login dans quelques instants ...
@@ -19,6 +20,6 @@ page <html>
 
 <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
 </form>
-
+</div>
 </body>
 </html>

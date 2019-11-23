@@ -11,6 +11,7 @@
     <title>Authentication successful</title>
 </head>
 <body>
+<div style="text-align: center;">
 <H3>*** Authentication successful ! ***</H3>
 <P>Veuillez entrer les informations additionnelles :
     <BR><BR>
@@ -20,5 +21,6 @@
 <P><input type="hidden" name="action" size=20 value="LoginOK"></P>
 <P><input type="submit" value="Confirmer"></P>
 </form>
+</div>
 </body>
 </html>
