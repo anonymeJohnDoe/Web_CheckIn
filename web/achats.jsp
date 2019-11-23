@@ -14,6 +14,19 @@
 <html>
 <head>
     <title>Reservation traversee</title>
+    <style>
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid black;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {background-color: #f2f2f2;}
+    </style>
 </head>
 <body>
 <div style="text-align: center;">
@@ -49,12 +62,20 @@
                     <div class="col-md-12">
                         <div style="text-align: center;">
                             <P></P>
-                            <h3>
-                                Reserver une traversee
+                            <h3 style="display: inline; border: 1px solid black;">
+                                <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
+                                <%  int nbTrav = (int)session.getAttribute("nbTrav"); %>
+                                Nombre traversees trouve : <%=nbTrav%>
+                                <% } else {%>
+                                Veuillez choisir une date où il y a des traversees enregistrees
+                                <% } %>
                             </h3>
-                            <table class="table">
+                            <table class="table" >
                                 <thead>
                                 <tr>
+                                    <th>
+                                        #
+                                    </th>
                                     <th>
                                         Code Traversee
                                     </th>
@@ -78,6 +99,9 @@
                                         <% for( int i=0; i< nbTrav; i++) { %>
                                             <tr class="table-active">
                                                 <td>
+                                                    <%=i+1 %>
+                                                </td>
+                                                <td>
                                                     <%=listTrav.get(i) %>
                                                 </td>
                                                 <td>
@@ -90,9 +114,10 @@
                                         <% } %>
                                     <% } else {%>
                                     <tr class="table-active">
-                                        <td>
-                                            Veuillez choisir une date où il y a des traversees enregistrees
-                                        </td>
+                                        <td> - </td>
+                                        <td> - </td>
+                                        <td> - </td>
+                                        <td> - </td>
                                     </tr>
                                     <% } %>
 

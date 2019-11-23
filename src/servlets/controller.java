@@ -48,13 +48,11 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //System.out.println("Do Post ");
         process(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //System.out.println("Do Get ");
         process(req, resp);
     }
 
@@ -62,6 +60,13 @@ public class controller extends HttpServlet implements HttpSessionListener {
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         HttpSession session = req.getSession(true);
+        if(session.isNew()){
+            System.out.println("/!\\ Nouvelle session creee");
+        }
+        else {
+            System.out.println("/!\\ Connecte a la session ouverte");
+
+        }
         ServletContext sc = getServletContext();
         String action = req.getParameter("action");
         sc.log("-- valeur de action = " + action);
@@ -100,7 +105,6 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     redirectSurPage("formulaire_login.jsp", req, resp);
 
 
-
                     break;
                 case "LOGIN_NEW_FORM" :
                     System.out.println("Dans LOGIN_NEW_FORM");
@@ -121,6 +125,15 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     String responseLNF = SendRequest(requestLNF);
                     System.out.println("Reponse serveur : *" + responseLNF + "*");
                     AnalyseReponse("LOGIN_GENERATE", responseLNF, req, resp, session);
+
+                    break;
+                case "MENU_ERR_LOGIN" :
+
+                    // Redigiger sur la page login de base, terminer session :
+                    System.out.println("/!\\ Suppression de la session en cours... ");
+                    session.invalidate();
+                    System.out.println("succes.");
+                    redirectSurPage("login.jsp", req, resp);
 
                     break;
                 case "ACHATS" :
@@ -169,6 +182,9 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Dans TERMINER");
 
                     // 1. Old client - terminer session, retour page fin_session->login
+                    System.out.println("/!\\ Suppression de la session en cours... ");
+                    session.invalidate();
+                    System.out.println("succes.");
                     redirectSurPage("fin_session.jsp", req, resp);
 
                     break;
@@ -201,18 +217,22 @@ public class controller extends HttpServlet implements HttpSessionListener {
         {
             case "LOGIN_VERIFY":
                 if(rep.equals("ACK")) {
-
-                    // aller dans menu
-                    // TODO : passer numClient à la page menu
                     System.out.println("Client trouve");
 
+                    //int NumClient = Integer.parseInt(req.getParameter("numcli"));
+                    String NumClient = req.getParameter("numcli");
+
+                    // 1. Sauvegarder numclient dans la sssion
+                    session.setAttribute("numCl", NumClient);
+
+                    // 2. Redirect sur menu
                     redirectSurPage("menu.jsp", req, resp);
 
                 } else {
-
-                    // num client existe pas
-                    // TODO : dire au client que numClient n'exste pas
                     System.out.println("Ce numero de client n'existe pas");
+
+                    // Output
+                    session.setAttribute("action", "LOGIN_FAIL");
 
                     redirectSurPage("login.jsp", req, resp);
                 }
@@ -224,10 +244,12 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     // recuperer numclient du serveur
                     String numCliGen = tok[1];
 
-                    // rediriger sur menu
-                    // TODO : passer numCliGen à la page menu
+                    // 1. Sauvegarder numclient dans la session
+                    session.setAttribute("numCl", numCliGen);
 
+                    // 2. Redirect sur menu
                     redirectSurPage("menu.jsp", req, resp);
+
                 }
 
                 break;

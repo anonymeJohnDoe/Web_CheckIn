@@ -11,9 +11,11 @@
     <title>Menu</title>
 </head>
 <body>
+    <!-- Verifier si client est connecte : -->
+<% String numCl = (String)session.getAttribute("numCl"); %>
+<% if(numCl != null) { %>
+
 <div style="text-align: center;">
-
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -21,6 +23,9 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-6">
+                    <h3>
+                        Votre numero client : <%=numCl%>
+                    </h3>
                     <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                         <h3>
                             MENU
@@ -44,5 +49,42 @@
     </div>
 </div>
 </div>
+<!-- si client pas connecté : -->
+<% } else {%>
+<!-- afficher message erreur -->
+
+    <div style="text-align: center;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+                            <h3>
+                                Session expirée !
+
+                                Veuillez cliquer le bouton pour revenir à la page Login pour vous identifier :
+                            </h3>
+                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
+
+                                <button type="submit" class="btn btn-success" name="action" value="MENU_ERR_LOGIN">
+                                    Revenir sur login
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%-- end else --%>
+<% } %>
+
+
+
 </body>
 </html>

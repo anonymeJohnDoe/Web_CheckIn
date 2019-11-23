@@ -25,10 +25,13 @@
     <button type="submit" class="btn btn-secondary" name="action" value="LOGIN_NEW">
         Obtenir un nouveau
     </button></P>
-<%--        <P>Pass : <input type="password" name="pass" size=20 value="lee"></P>--%>
-<%--        <P><input type="hidden" name="action" size=20 value="LOGIN"></P>--%>
-<%--        <P><input type="submit" name="action" value="Verifier ID">--%>
-<%--        <input type="submit" name="action" value="Obtenir un nouveau"></P>--%>
+
+    <h3 style="color:red;">
+        <% String action = (String)session.getAttribute("action"); %>
+        <% if(action != null && action.equals("LOGIN_FAIL")) {%>
+            Veuillez entrer un Client ID correct ou cliquez sur "Obtenir un nouveau"
+        <% } %>
+    </h3>
 
 </form>
 </div>
