@@ -94,6 +94,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Reponse serveur : *" + responseLV + "*");
                     AnalyseReponse("LOGIN_VERIFY",responseLV, req, resp, session);
 
+
                     break;
                 case "LOGIN_NEW":
                     System.out.println("Dans LOGIN_NEW");
@@ -126,6 +127,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Reponse serveur : *" + responseLNF + "*");
                     AnalyseReponse("LOGIN_GENERATE", responseLNF, req, resp, session);
 
+
                     break;
                 case "MENU_ERR_LOGIN" :
 
@@ -134,6 +136,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.invalidate();
                     System.out.println("succes.");
                     redirectSurPage("login.jsp", req, resp);
+
 
                     break;
                 case "ACHATS" :
@@ -173,6 +176,42 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                     break;
+
+                case "CHECKOUT_RET_PANIER" :
+                    System.out.println("Dans CHECKOUT_RET_PANIER");
+
+                    // TODO : rediriger sur page Panier
+                    //redirectSurPage("panier.jsp", req, resp);
+
+
+                    break;
+                case "CHECKOUT" :
+                    System.out.println("Dans CHECKOUT");
+
+                    // TODO : compter nb res, compter prix total
+                    int nbRes = 0;
+                    int prixTotal = 777;
+
+                    // Redirect sur page confirmation achats
+                    session.setAttribute("nbRes", nbRes);
+                    session.setAttribute("prixTotal", prixTotal);
+                    redirectSurPage("checkout_confirm.jsp", req, resp);
+
+
+                    break;
+                case "CHECKOUT_CONFIRM" :
+                    System.out.println("Dans CHECKOUT_CONFIRM");
+
+                    // TODO : envoyer requete d'achat au serveur
+
+
+                    // Redirect sur page confirmation achats
+//                    session.setAttribute("nbRes", nbRes);
+//                    session.setAttribute("prixTotal", prixTotal);
+                    redirectSurPage("checkout_merci.jsp", req, resp);
+
+
+                    break;
                 case "PROMO" :
                     System.out.println("Dans PROMO");
 
@@ -186,6 +225,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.invalidate();
                     System.out.println("succes.");
                     redirectSurPage("fin_session.jsp", req, resp);
+
 
                     break;
 //                case "TERMINER_FORM" :
@@ -265,15 +305,17 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     ArrayList<String> listTravALTR = new ArrayList<>();
                     ArrayList<String> listHorairALTR = new ArrayList<>();
                     ArrayList<String> listDestALTR = new ArrayList<>();
+                    ArrayList<String> listPrixALTR = new ArrayList<>();
+
 
                     System.out.println("Liste de traversees pour la date :");
-                    for (int i=0, i_tr=2, i_hor=3, i_des=4; i<nbTravALTR; i++, i_tr+=3, i_hor+=3, i_des+=3)
+                    for (int i=0, i_tr=2, i_hor=3, i_des=4, i_pr=5; i<nbTravALTR; i++, i_tr+=4, i_hor+=4, i_des+=4, i_pr+=4)
                     {
                         listTravALTR.add(tok[i_tr]);
                         listHorairALTR.add(tok[i_hor]);
                         listDestALTR.add(tok[i_des]);
-
-                        System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des]);
+                        listPrixALTR.add(tok[i_pr]);
+                        System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des] + " - " + tok[i_pr]);
                     }
 
                     // 2. Sauvegarder liste dans objet session
@@ -281,15 +323,14 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.setAttribute("listTrav", listTravALTR);
                     session.setAttribute("listHorair", listHorairALTR);
                     session.setAttribute("listDest", listDestALTR);
-
+                    session.setAttribute("listPrix", listPrixALTR);
 
                     // 3. Redirect sur achats
                     session.setAttribute("action","ACHATS_LISTE_TRAV_TROUV");
                     redirectSurPage("achats.jsp", req, resp);
 
                 }
-                else
-                {
+                else {
                     System.out.println("Pas de traversees trouvees");
                     // Redirect sur achats
                     session.setAttribute("action","ACHATS_LISTE_TRAV_VIDE");

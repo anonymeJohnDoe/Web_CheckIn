@@ -5,6 +5,7 @@
 <%  ArrayList<String> listTrav = new ArrayList<>(); %>
 <%  ArrayList<String> listHorair = new ArrayList<>(); %>
 <%  ArrayList<String> listDest = new ArrayList<>(); %>
+<%  ArrayList<String> listPrix = new ArrayList<>(); %>
 <%  String action = (String)session.getAttribute("action"); %>
 
 
@@ -85,6 +86,9 @@
                                     <th>
                                         Destination
                                     </th>
+                                    <th>
+                                        Prix
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -95,8 +99,9 @@
                                         <% listTrav = (ArrayList<String>) session.getAttribute("listTrav");%>
                                         <% listHorair = (ArrayList<String>) session.getAttribute("listHorair");%>
                                         <% listDest = (ArrayList<String>) session.getAttribute("listDest");%>
+                                        <% listPrix = (ArrayList<String>) session.getAttribute("listPrix");%>
 
-                                        <% for( int i=0; i< nbTrav; i++) { %>
+                                    <% for( int i=0; i< nbTrav; i++) { %>
                                             <tr class="table-active">
                                                 <td>
                                                     <%=i+1 %>
@@ -110,6 +115,9 @@
                                                 <td>
                                                     <%=listDest.get(i) %>
                                                 </td>
+                                                <td>
+                                                    <%=listPrix.get(i) %>
+                                                </td>
                                             </tr>
                                         <% } %>
                                     <% } else {%>
@@ -118,10 +126,9 @@
                                         <td> - </td>
                                         <td> - </td>
                                         <td> - </td>
+                                        <td> - </td>
                                     </tr>
                                     <% } %>
-
-
 
                                 </tbody>
                             </table>
