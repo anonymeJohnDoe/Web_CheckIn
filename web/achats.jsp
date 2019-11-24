@@ -30,6 +30,9 @@
     </style>
 </head>
 <body>
+<!-- Verifier si client est connecte : -->
+<% String numCl = (String)session.getAttribute("numCl"); %>
+<% if(numCl != null) { %>
 <div style="text-align: center;">
     <div class="container-fluid">
         <div class="row">
@@ -139,5 +142,12 @@
         </div>
     </div>
 </div>
+
+<% } else {%>
+<!-- si client pas connecté : -->
+<!-- Afficher page d'erreur   -->
+<%@ include file="/session_expired.jsp" %>
+
+<% } %> <%-- end else --%>
 </body>
 </html>

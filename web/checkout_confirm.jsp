@@ -1,12 +1,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
-<%  int nbRes = (int)session.getAttribute("nbRes"); %>
-<%  int prixTotal = (int)session.getAttribute("prixTotal"); %>
-
-
-
 <% %>
 <% %>
 
@@ -18,6 +12,9 @@
     </style>
 </head>
 <body>
+<!-- Verifier si client est connecte : -->
+<% String numCl = (String)session.getAttribute("numCl"); %>
+<% if(numCl != null) { %>
 <div style="text-align: center;">
     <div class="container-fluid">
         <div class="row">
@@ -38,7 +35,8 @@
                     </div>
                     <div class="col-md-8">
                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-
+                                <%  int nbRes = (int)session.getAttribute("nbRes"); %>
+                                <%  int prixTotal = (int)session.getAttribute("prixTotal"); %>
                                 <label>Nombre de reservations :</label>
                                 <label><%=nbRes%></label>
                                 <label>Total a payer :</label>
@@ -56,5 +54,11 @@
         </div>
     </div>
 </div>
+<% } else {%>
+<!-- si client pas connecté : -->
+<!-- Afficher page d'erreur   -->
+<%@ include file="/session_expired.jsp" %>
+
+<% } %> <%-- end else --%>
 </body>
 </html>

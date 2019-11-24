@@ -49,41 +49,12 @@
     </div>
 </div>
 </div>
-<!-- si client pas connecté : -->
 <% } else {%>
-<!-- afficher message erreur -->
+    <!-- si client pas connecté : -->
+    <!-- Afficher page d'erreur   -->
+    <%@ include file="/session_expired.jsp" %>
 
-    <div style="text-align: center;">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-3">
-                        </div>
-                        <div class="col-md-6">
-                            <h3>
-                                Session expirée !
-
-                                Veuillez cliquer le bouton pour revenir à la page Login pour vous identifier :
-                            </h3>
-                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-
-                                <button type="submit" class="btn btn-success" name="action" value="MENU_ERR_LOGIN">
-                                    Revenir sur login
-                                </button>
-                            </form>
-                        </div>
-                        <div class="col-md-3">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<%-- end else --%>
-<% } %>
-
+<% } %> <%-- end else --%>
 
 
 </body>

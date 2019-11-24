@@ -43,6 +43,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
     @Override
     public void destroy() {
+        System.out.println("* * * * * Dans Destroy() * * * * *");
         super.destroy();
     }
 
@@ -55,7 +56,6 @@ public class controller extends HttpServlet implements HttpSessionListener {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         process(req, resp);
     }
-
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
