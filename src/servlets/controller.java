@@ -8,9 +8,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -228,6 +226,25 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                     break;
+                case "ADD_PANIER" :
+                    System.out.println("Dans ADD_PANIER");
+
+
+                    System.out.println("Num CLient : " + (String)session.getAttribute("numCli"));
+
+                    // Envoyer requete au serveur : chercher les traversees pour date donnee
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add((String)session.getAttribute("numCl"));
+                    _arrayOfArg.add(req.getParameter("traverseesId"));
+                    requestADC = MakeRequest("ADD_PANIER", _arrayOfArg, true);
+                    System.out.println("Requete : " + requestADC);
+                    responseADC = SendRequest(requestADC);
+                    System.out.println("Reponse serveur : *" + responseADC + "*");
+                    AnalyseReponse("ADD_PANIER", responseADC, req, resp, session);
+
+
+
+                    break;
 //                case "TERMINER_FORM" :
 //                    System.out.println("Dans TERMINER_FORM");
 //
@@ -267,6 +284,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     // 2. Redirect sur menu
                     redirectSurPage("menu.jsp", req, resp);
+
 
                 } else {
                     System.out.println("Ce numero de client n'existe pas");
@@ -337,6 +355,20 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     redirectSurPage("achats.jsp", req, resp);
                 }
 
+                break;
+            case "ADD_PANIER":
+                if(rep.equals("ACK"))
+                {
+                    System.out.println("Ajout panier : OK");
+                    // Redirect sur achats
+                    session.setAttribute("ajoutPanier","ACK");
+
+                } else {
+
+                    System.out.println("Ajout panier : Fail");
+                    // Redirect sur achats
+                    session.setAttribute("ajoutPanier","NAVIRE_IS_FULL");
+                }
                 break;
             case "B" :
 
@@ -426,7 +458,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
         {
             System.getProperty("user.dir");
             // recup user.dir
-            _InStream = new FileInputStream("C:\\Users\\stasy\\Desktop\\RTI\\Labo\\Evaluation3\\Web_CheckIn\\resources\\config.properties");
+            _InStream = new FileInputStream("D:\\Workspace\\Git\\Web_CheckIn\\resources\\config.properties");
             _propFile.load(_InStream);
             _port = Integer.parseInt(_propFile.getProperty("PORT"));
             _host = _propFile.getProperty("HOST");
