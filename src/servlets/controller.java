@@ -184,11 +184,17 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Dans CHECKOUT_RET_PANIER");
 
                     // TODO : rediriger sur page Panier
-                    //redirectSurPage("panier.jsp", req, resp);
+                    redirectSurPage("panier.jsp", req, resp);
 
 
                     break;
                 case "CHECKOUT" :
+
+                    redirectSurPage("checkout.jsp", req, resp);
+
+                    break;
+                case "CHECKOUT_CONFIRM" :
+
                     System.out.println("Dans CHECKOUT");
 
                     // TODO : compter nb res, compter prix total
@@ -200,9 +206,10 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.setAttribute("prixTotal", prixTotal);
                     redirectSurPage("checkout_confirm.jsp", req, resp);
 
-
                     break;
-                case "CHECKOUT_CONFIRM" :
+
+
+                case "CHECKOUT_MERCI" :
                     System.out.println("Dans CHECKOUT_CONFIRM");
 
                     // TODO : envoyer requete d'achat au serveur
@@ -212,9 +219,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
 //                    session.setAttribute("nbRes", nbRes);
 //                    session.setAttribute("prixTotal", prixTotal);
                     redirectSurPage("checkout_merci.jsp", req, resp);
-
-
                     break;
+
                 case "PROMO" :
                     System.out.println("Dans PROMO");
 

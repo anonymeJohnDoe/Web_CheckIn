@@ -42,7 +42,7 @@
                                 <label>Total a payer :</label>
                                 <h3><%=prixTotal%></h3>
 
-                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_CONFIRM"> Continuer </button>
+                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_MERCI"> Continuer </button>
                             <button type="submit" class="btn btn-success" name="action" value="CHECKOUT_RET_PANIER"> Revenir au panier </button></P>
                         </form>
 

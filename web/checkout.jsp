@@ -67,7 +67,7 @@
                                 <input align="right" type="text" class="form-control" name="dateExp" id="dateExp">
                             </div>
 
-                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT"> Continuer </button>
+                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_CONFIRM"> Continuer </button>
                             <button type="submit" class="btn btn-success" name="action" value="CHECKOUT_RET_PANIER"> Revenir au panier </button></P>
                         </form>
 
