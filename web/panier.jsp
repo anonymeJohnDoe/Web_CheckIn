@@ -1,5 +1,6 @@
 <%@ page import="DataClass.Traversees" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="DataClass.Panier" %><%--
   Created by IntelliJ IDEA.
   User: Anonyme
   Date: 25/11/2019
@@ -8,7 +9,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%  ArrayList<Traversees> listTrav = new ArrayList<>(); %>
+<%  ArrayList<Panier> list_Panier = new ArrayList<>(); %>
 <%  String action = (String)session.getAttribute("action"); %>
 
 <html>
@@ -51,30 +52,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2">
-                    </div>
-                    <div class="col-md-8">
-                        <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                            <span class="badge badge-default">Choisissez une date : </span>
-                            <P><input type="date" name="datetr"></P>
-                            <P><button type="submit" class="btn btn-success" name="action" value="ACHATS_DATE_CH"> Continuer </button>
-                                <button type="submit" class="btn btn-success" name="action" value="ACHATS_RET_MENU"> Revenir au menu </button></P>
-                        </form>
-                    </div>
-                    <div class="col-md-2">
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-12">
                         <div style="text-align: center;">
-                            <P></P>
-                            <h3 style="display: inline; border: 1px solid black;">
-                                <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
-
-                                <% } else {%>
-                                Veuillez choisir une date où il y a des traversees enregistrees
-                                <% } %>
-                            </h3>
                             <table class="table" >
                                 <thead>
                                 <tr>
@@ -82,19 +61,19 @@
                                         #
                                     </th>
                                     <th>
-                                        Code Traversee
+                                        ID Panier
                                     </th>
                                     <th>
-                                        Heure de depart
+                                        Traversees ID
                                     </th>
                                     <th>
-                                        Destination
+                                        Client ID
                                     </th>
                                     <th>
                                         Prix
                                     </th>
                                     <th>
-                                        Panier
+                                        Remove
                                     </th>
                                 </tr>
                                 </thead>
@@ -102,28 +81,28 @@
                                 <%-- Boucle : afficher les  traversees --%>
                                 <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
 
-                                <% listTrav = (ArrayList<Traversees>) session.getAttribute("listTrav");%>
+                                <% list_Panier = (ArrayList<Panier>) session.getAttribute("list_Panier");%>
 
-                                <% for( int i=0; i< listTrav.size(); i++) { %>
+                                <% for( int i=0; i< list_Panier.size(); i++) { %>
                                 <tr class="table-active">
                                     <td>
                                         <%=i+1 %>
                                     </td>
                                     <td>
-                                        <%=listTrav.get(i).get_idTraversees() %>
+                                        <%=list_Panier.get(i).get_id_panier() %>
                                     </td>
                                     <td>
-                                        <%=listTrav.get(i).get_heureDep() %>
+                                        <%=list_Panier.get(i).get_traversee_id() %>
                                     </td>
                                     <td>
-                                        <%=listTrav.get(i).get_destination() %>
+                                        <%=list_Panier.get(i).get_client_id() %>
                                     </td>
                                     <td>
-                                        <%=listTrav.get(i).get_prix() %>
+                                        <%=list_Panier.get(i).get_prix() %>
                                     </td>
                                     <td>
                                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                                            <input type="hidden" name="traverseesId" value="<%=listTrav.get(i).get_idTraversees()%>"/>
+                                            <input type="hidden" name="panierId" value="<%=list_Panier.get(i).get_id_panier()%>"/>
                                             <button type="submit" class="btn btn-success" name="action" value="REMOVE">
                                                 Remove
                                             </button>
