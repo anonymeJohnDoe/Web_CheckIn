@@ -97,7 +97,8 @@
                                     <td>
                                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                                             <input type="hidden" name="panierId" value="<%=list_Panier.get(i).get_id_panier()%>"/>
-                                            <button type="submit" class="btn btn-success" name="action" value="REMOVE">
+                                            <input type="hidden" name="numCli" value="<%=list_Panier.get(i).get_client_id()%>"/>
+                                            <button type="submit" class="btn btn-success" name="action" value="REMOVE_FROM_PANIER">
                                                 Remove
                                             </button>
                                         </form>

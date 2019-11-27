@@ -276,6 +276,26 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     break;
 
+                case "REMOVE_FROM_PANIER":
+
+                    System.out.println("Dans REMOVE_FROM_PANIER");
+
+
+                    System.out.println("ID PANIER : " + (String)session.getAttribute("panierId"));
+
+                    // Envoyer requete au serveur : chercher les traversees pour date donnee
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add(req.getParameter("panierId"));
+                    _arrayOfArg.add(req.getParameter("numCli"));
+                    requestADC = MakeRequest("REMOVE_FROM_PANIER", _arrayOfArg, true);
+                    System.out.println("Requete : " + requestADC);
+                    responseADC = SendRequest(requestADC);
+                    System.out.println("Reponse serveur : *" + responseADC + "*");
+                    AnalyseReponse("PANIER", responseADC, req, resp, session);
+
+
+                    break;
+
                 case "PAYEMENT" :
 
                     break;
@@ -449,6 +469,53 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     // Output
                     session.setAttribute("action", "GET_PANIER_FAIL");
+
+                    redirectSurPage("error.jsp", req, resp);
+                }
+
+
+                break;
+
+            case "REMOVE_FROM_PANIER":
+
+                if(rep.equals("ACK")) {
+                    String tokenn = tokfull.replaceAll("ACK", "");
+                    String token = tokenn.replaceAll("#", "");
+                    String[] tokens = token.split("\\|");
+
+
+                    // 1. boucle : creer liste idtraversees, horaires, destinations
+                    ArrayList<Panier> list_Panier = new ArrayList<>();
+
+
+                    System.out.println("Liste d'achats dans un panier :");
+                    for (String str : tokens)
+                    {
+
+                        String[] onePanierSplit = str.split(";");
+                        Panier panier = new Panier();
+                        panier.set_id_panier(onePanierSplit[1]);
+                        panier.set_traversee_id(onePanierSplit[2]);
+                        panier.set_client_id(onePanierSplit[3]);
+                        panier.set_prix(onePanierSplit[4]);
+
+                        list_Panier.add(panier);
+
+                    }
+
+                    // 2. Sauvegarder liste dans objet session
+                    session.setAttribute("list_Panier", list_Panier);
+                    session.setAttribute("action", "GET_PANIER_OK");
+
+                    // 2. Redirect sur menu
+                    redirectSurPage("panier.jsp", req, resp);
+
+
+                } else {
+                    System.out.println("Erreur removing item from panier");
+
+                    // Output
+                    session.setAttribute("action", "REMOVE_ITEM_PANIER_FAIL");
 
                     redirectSurPage("error.jsp", req, resp);
                 }
