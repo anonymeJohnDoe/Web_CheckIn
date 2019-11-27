@@ -35,10 +35,7 @@
                     </div>
                     <div class="col-md-8">
                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                                <%  int nbRes = (int)session.getAttribute("nbRes"); %>
-                                <%  int prixTotal = (int)session.getAttribute("prixTotal"); %>
-                                <label>Nombre de reservations :</label>
-                                <label><%=nbRes%></label>
+                                <%  int prixTotal = (int)session.getAttribute("somme_Total"); %>
                                 <label>Total a payer :</label>
                                 <h3><%=prixTotal%></h3>
 

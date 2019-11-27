@@ -120,7 +120,9 @@
                                     for( int i=0; i< list_Panier.size(); i++) {
 
                                         somme_Total += Integer.parseInt(list_Panier.get(i).get_prix());
+
                                     }
+                                    session.setAttribute("somme_Total", somme_Total);
                                 %>
                                 </tbody>
                             </table>
