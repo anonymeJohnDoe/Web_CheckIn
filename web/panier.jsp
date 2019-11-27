@@ -76,7 +76,7 @@
                                 </thead>
                                 <tbody>
                                 <%-- Boucle : afficher les  traversees --%>
-                                <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
+                                <%  if(action != null && action.equals("GET_PANIER_OK")) {%>
 
                                 <% list_Panier = (ArrayList<Panier>) session.getAttribute("list_Panier");%>
 

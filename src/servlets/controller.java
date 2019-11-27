@@ -430,7 +430,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     }
 
                     // 2. Sauvegarder liste dans objet session
-                    session.setAttribute("listPanier", list_Panier);
+                    session.setAttribute("list_Panier", list_Panier);
 
                     session.setAttribute("action", "GET_PANIER_OK");
 
