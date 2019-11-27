@@ -1,5 +1,7 @@
 package servlets;
 
+import DataClass.Traversees;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -10,6 +12,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Properties;
+
+import static java.lang.String.valueOf;
 
 /**
  * Created by cyril rocca Gr 2227 INPRES .
@@ -86,7 +90,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     // 3. Envoyer requete au serveur_compagnie pour verif num client
                     _arrayOfArg.clear();
-                    _arrayOfArg.add(String.valueOf(num_client));
+                    _arrayOfArg.add(valueOf(num_client));
                     String requestLV = MakeRequest("LOGIN_VERIFY", _arrayOfArg, false);
                     String responseLV = SendRequest(requestLV);
                     System.out.println("Reponse serveur : *" + responseLV + "*");
@@ -236,6 +240,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     _arrayOfArg.clear();
                     _arrayOfArg.add((String)session.getAttribute("numCl"));
                     _arrayOfArg.add(req.getParameter("traverseesId"));
+                    _arrayOfArg.add(req.getParameter("prix"));
                     requestADC = MakeRequest("ADD_PANIER", _arrayOfArg, true);
                     System.out.println("Requete : " + requestADC);
                     responseADC = SendRequest(requestADC);
@@ -243,6 +248,28 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     AnalyseReponse("ADD_PANIER", responseADC, req, resp, session);
 
 
+
+                    break;
+
+                case "PANIER":
+
+                    System.out.println("Dans PANIER");
+
+
+                    System.out.println("Num CLient : " + (String)session.getAttribute("numCli"));
+
+                    // Envoyer requete au serveur : chercher les traversees pour date donnee
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add((String)session.getAttribute("numCl"));
+                    requestADC = MakeRequest("PANIER", _arrayOfArg, true);
+                    System.out.println("Requete : " + requestADC);
+                    responseADC = SendRequest(requestADC);
+                    System.out.println("Reponse serveur : *" + responseADC + "*");
+                    AnalyseReponse("PANIER", responseADC, req, resp, session);
+
+                    break;
+
+                case "PAYEMENT" :
 
                     break;
 //                case "TERMINER_FORM" :
@@ -314,34 +341,34 @@ public class controller extends HttpServlet implements HttpSessionListener {
             case "ACHATS_LISTE_TRAV_RECH" :
                 if(rep.equals("ACK"))
                 {
-                    // 0. recuperer le nombre de donnees-traversees recues
-                    int nbTravALTR = Integer.parseInt(tok[1]);
-                    System.out.println("Nombre traversees trouvees pour la date : " + nbTravALTR);
+
+                    String tokenn = tokfull.replaceAll("ACK", "");
+                    String token = tokenn.replaceAll("#", "");
+                    String[] tokens = token.split("\\|");
 
 
                     // 1. boucle : creer liste idtraversees, horaires, destinations
-                    ArrayList<String> listTravALTR = new ArrayList<>();
-                    ArrayList<String> listHorairALTR = new ArrayList<>();
-                    ArrayList<String> listDestALTR = new ArrayList<>();
-                    ArrayList<String> listPrixALTR = new ArrayList<>();
+                    ArrayList<Traversees> listTravALTR = new ArrayList<>();
 
 
                     System.out.println("Liste de traversees pour la date :");
-                    for (int i=0, i_tr=2, i_hor=3, i_des=4, i_pr=5; i<nbTravALTR; i++, i_tr+=4, i_hor+=4, i_des+=4, i_pr+=4)
+                    for (String str : tokens)
                     {
-                        listTravALTR.add(tok[i_tr]);
-                        listHorairALTR.add(tok[i_hor]);
-                        listDestALTR.add(tok[i_des]);
-                        listPrixALTR.add(tok[i_pr]);
-                        System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des] + " - " + tok[i_pr]);
+
+                        String[] oneTravSplit = str.split(";");
+                        Traversees trav = new Traversees();
+                        trav.set_idTraversees(oneTravSplit[1]);
+                        trav.set_heureDep(oneTravSplit[2]);
+                        trav.set_destination(oneTravSplit[3]);
+                        trav.set_prix(oneTravSplit[4]);
+
+                        listTravALTR.add(trav);
+
+                        //System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des] + " - " + tok[i_pr]);
                     }
 
                     // 2. Sauvegarder liste dans objet session
-                    session.setAttribute("nbTrav", nbTravALTR);
                     session.setAttribute("listTrav", listTravALTR);
-                    session.setAttribute("listHorair", listHorairALTR);
-                    session.setAttribute("listDest", listDestALTR);
-                    session.setAttribute("listPrix", listPrixALTR);
 
                     // 3. Redirect sur achats
                     session.setAttribute("action","ACHATS_LISTE_TRAV_TROUV");
@@ -370,7 +397,30 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.setAttribute("ajoutPanier","NAVIRE_IS_FULL");
                 }
                 break;
-            case "B" :
+            case "PANIER" :
+
+                if(rep.equals("ACK")) {
+                    System.out.println("Panier trouve");
+
+                    //int NumClient = Integer.parseInt(req.getParameter("numcli"));
+                    String NumClient = req.getParameter("numcli");
+
+                    // 1. Sauvegarder numclient dans la sssion
+                    session.setAttribute("numCl", NumClient);
+                    session.setAttribute("action", "PANIER_OK");
+
+                    // 2. Redirect sur menu
+                    redirectSurPage("panier.jsp", req, resp);
+
+
+                } else {
+                    System.out.println("Ce numero de client n'existe pas");
+
+                    // Output
+                    session.setAttribute("action", "PANIER_FAIL");
+
+                    redirectSurPage("error.jsp", req, resp);
+                }
 
 
                 break;
