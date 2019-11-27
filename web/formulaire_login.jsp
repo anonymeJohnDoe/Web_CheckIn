@@ -19,7 +19,7 @@
 <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
     <P>Nom : <input type="text" name="nomcli" size=20 value="Nom"></P>
     <P>Prenom : <input type="text" name="prenomcli" size=20 value="Prenom"></P>
-    <P>Adresse : <input type="text" name="adrcli" size=20 value="rue de l'adresse"></P>
+    <P>Adresse : <input type="text" name="adrcli" size=20 value="rue de l adresse"></P>
     <P>E-mail : <input type="text" name="emailcli" size=20 value="email@email.com"></P>
     <!-- champs hidden : -->
     <!--input type="hidden" name="typeLogin" value="NEW_CLIENT"></P-->
