@@ -1,5 +1,6 @@
 package servlets;
 
+import DataClass.Panier;
 import DataClass.Traversees;
 
 import javax.servlet.RequestDispatcher;
@@ -389,12 +390,16 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Ajout panier : OK");
                     // Redirect sur achats
                     session.setAttribute("ajoutPanier","ACK");
+                    // Redirect sur achats
+                    redirectSurPage("achats.jsp", req, resp);
 
                 } else {
 
                     System.out.println("Ajout panier : Fail");
                     // Redirect sur achats
                     session.setAttribute("ajoutPanier","NAVIRE_IS_FULL");
+                    // Redirect sur achats
+                    redirectSurPage("achats.jsp", req, resp);
                 }
                 break;
             case "PANIER" :
@@ -406,29 +411,28 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                     // 1. boucle : creer liste idtraversees, horaires, destinations
-                    ArrayList<Traversees> listTravALTR = new ArrayList<>();
+                    ArrayList<Panier> list_Panier = new ArrayList<>();
 
 
-                    System.out.println("Liste de traversees pour la date :");
+                    System.out.println("Liste d'achats dans un panier :");
                     for (String str : tokens)
                     {
 
-                        String[] oneTravSplit = str.split(";");
-                        Traversees trav = new Traversees();
-                        trav.set_idTraversees(oneTravSplit[1]);
-                        trav.set_heureDep(oneTravSplit[2]);
-                        trav.set_destination(oneTravSplit[3]);
-                        trav.set_prix(oneTravSplit[4]);
+                        String[] onePanierSplit = str.split(";");
+                        Panier panier = new Panier();
+                        panier.set_id_panier(onePanierSplit[1]);
+                        panier.set_traversee_id(onePanierSplit[2]);
+                        panier.set_client_id(onePanierSplit[3]);
+                        panier.set_prix(onePanierSplit[4]);
 
-                        listTravALTR.add(trav);
+                        list_Panier.add(panier);
 
-                        //System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des] + " - " + tok[i_pr]);
                     }
 
                     // 2. Sauvegarder liste dans objet session
-                    session.setAttribute("listTrav", listTravALTR);
+                    session.setAttribute("listPanier", list_Panier);
 
-                    session.setAttribute("action", "PANIER_OK");
+                    session.setAttribute("action", "GET_PANIER_OK");
 
                     // 2. Redirect sur menu
                     redirectSurPage("panier.jsp", req, resp);
@@ -438,7 +442,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Erreur fetching panier");
 
                     // Output
-                    session.setAttribute("action", "PANIER_FAIL");
+                    session.setAttribute("action", "GET_PANIER_FAIL");
 
                     redirectSurPage("error.jsp", req, resp);
                 }
