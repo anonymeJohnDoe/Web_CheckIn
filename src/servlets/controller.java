@@ -400,13 +400,34 @@ public class controller extends HttpServlet implements HttpSessionListener {
             case "PANIER" :
 
                 if(rep.equals("ACK")) {
-                    System.out.println("Panier trouve");
+                    String tokenn = tokfull.replaceAll("ACK", "");
+                    String token = tokenn.replaceAll("#", "");
+                    String[] tokens = token.split("\\|");
 
-                    //int NumClient = Integer.parseInt(req.getParameter("numcli"));
-                    String NumClient = req.getParameter("numcli");
 
-                    // 1. Sauvegarder numclient dans la sssion
-                    session.setAttribute("numCl", NumClient);
+                    // 1. boucle : creer liste idtraversees, horaires, destinations
+                    ArrayList<Traversees> listTravALTR = new ArrayList<>();
+
+
+                    System.out.println("Liste de traversees pour la date :");
+                    for (String str : tokens)
+                    {
+
+                        String[] oneTravSplit = str.split(";");
+                        Traversees trav = new Traversees();
+                        trav.set_idTraversees(oneTravSplit[1]);
+                        trav.set_heureDep(oneTravSplit[2]);
+                        trav.set_destination(oneTravSplit[3]);
+                        trav.set_prix(oneTravSplit[4]);
+
+                        listTravALTR.add(trav);
+
+                        //System.out.println(tok[i_tr] + " - " + tok[i_hor] + " - " + tok[i_des] + " - " + tok[i_pr]);
+                    }
+
+                    // 2. Sauvegarder liste dans objet session
+                    session.setAttribute("listTrav", listTravALTR);
+
                     session.setAttribute("action", "PANIER_OK");
 
                     // 2. Redirect sur menu
@@ -414,7 +435,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                 } else {
-                    System.out.println("Ce numero de client n'existe pas");
+                    System.out.println("Erreur fetching panier");
 
                     // Output
                     session.setAttribute("action", "PANIER_FAIL");
