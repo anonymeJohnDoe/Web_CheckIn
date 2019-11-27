@@ -58,9 +58,6 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                        #
-                                    </th>
-                                    <th>
                                         ID Panier
                                     </th>
                                     <th>
@@ -85,9 +82,6 @@
 
                                 <% for( int i=0; i< list_Panier.size(); i++) { %>
                                 <tr class="table-active">
-                                    <td>
-                                        <%=i+1 %>
-                                    </td>
                                     <td>
                                         <%=list_Panier.get(i).get_id_panier() %>
                                     </td>
