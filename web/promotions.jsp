@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>Reservation traversee</title>
+    <title>Promotions</title>
     <style>
         table {
             border: 1px solid black;
@@ -38,8 +38,9 @@
         <!-- Bouton panier   -->
         <%--@ include file="/html_panierbtn.jsp" --%>
         <jsp:include page="/html_panierbtn.jsp">
-            <jsp:param name="page_prec" value="achats.jsp"/>
+            <jsp:param name="page_prec" value="promotions.jsp"/>
         </jsp:include>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
@@ -47,7 +48,7 @@
                     </div>
                     <div class="col-md-8">
                         <h3>
-                            Reserver une traversee
+                            Last Minutes !
                         </h3>
                     </div>
                     <div class="col-md-2">
@@ -58,10 +59,7 @@
                     </div>
                     <div class="col-md-8">
                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                            <span class="badge badge-default">Choisissez une date : </span>
-                            <P><input type="date" name="datetr"></P>
-                            <P><button type="submit" class="btn btn-success" name="action" value="ACHATS_DATE_CH"> Continuer </button>
-                            <button type="submit" class="btn btn-success" name="action" value="ACHATS_RET_MENU"> Revenir au menu </button></P>
+                                <P><button type="submit" class="btn btn-success" name="action" value="PROMO_RET_MENU"> Revenir au menu </button></P>
                         </form>
                     </div>
                     <div class="col-md-2">
@@ -72,10 +70,10 @@
                         <div style="text-align: center;">
                             <P></P>
                             <h3 style="display: inline; border: 1px solid black;">
-                                <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
-
+                                <%  if(action != null && action.equals("PROMO_LISTE_TRAV_TROUV")) {%>
+                                Liste des Last Minutes :
                                 <% } else {%>
-                                Veuillez choisir une date où il y a des traversees enregistrees
+                                Pas de promotions pour aujourd'hui, revenez demain :D
                                 <% } %>
                             </h3>
                             <table class="table" >
@@ -103,7 +101,7 @@
                                 </thead>
                                 <tbody>
                                     <%-- Boucle : afficher les  traversees --%>
-                                    <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
+                                    <%  if(action != null && action.equals("PROMO_LISTE_TRAV_TROUV")) {%>
 
                                         <% listTrav = (ArrayList<Traversees>) session.getAttribute("listTrav");%>
 
@@ -128,7 +126,7 @@
                                                     <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                                                         <input type="hidden" name="traverseesId" value="<%=listTrav.get(i).get_idTraversees()%>"/>
                                                         <input type="hidden" name="prix" value="<%=listTrav.get(i).get_prix()%>"/>
-                                                        <input type="hidden" name="page_prec" value="achats.jsp"/>
+                                                        <input type="hidden" name="page_prec" value="promotions.jsp"/>
                                                         <button type="submit" class="btn btn-success" name="action" value="ADD_PANIER">
                                                             Panier
                                                         </button>

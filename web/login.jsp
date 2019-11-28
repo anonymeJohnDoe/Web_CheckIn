@@ -29,7 +29,7 @@
     <h3 style="color:red;">
         <% String action = (String)session.getAttribute("action"); %>
         <% if(action != null && action.equals("LOGIN_FAIL")) {%>
-            Veuillez entrer un Client ID correct ou cliquez sur "Obtenir un nouveau"
+            Veuillez entrer un Client ID correct ou cliquer sur "Obtenir un nouveau"
         <% } %>
     </h3>
 

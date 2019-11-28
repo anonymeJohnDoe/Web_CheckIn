@@ -12,6 +12,8 @@
 <%  ArrayList<Panier> list_Panier = new ArrayList<>(); %>
 <%  int somme_Total = 0; %>
 <%  String action = (String)session.getAttribute("action"); %>
+<%  String page_prec = (String)session.getAttribute("page_prec"); %>
+
 
 <html>
 <head>
@@ -127,9 +129,14 @@
                                 </tbody>
                             </table>
                             <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                                <button type="submit" class="btn btn-success" name="action" value="CHECKOUT">
+                                <input type="hidden" name="page_prec" value="${param.page_prec}"/>
+                                <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT">
                                     CHECKOUT
                                 </button>
+                                <button type="submit" class="btn btn-success" name="action" value="PANIER_RETOUR">
+                                    Retour a la page précédente
+                                </button></P>
+
                             </form>
                             <div>
                                 Somme Total : <%=somme_Total%>

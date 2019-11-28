@@ -17,6 +17,11 @@
 
 <div style="text-align: center;">
 <div class="container-fluid">
+    <!-- Bouton panier   -->
+    <%--@ include file="/html_panierbtn.jsp" --%>
+    <jsp:include page="/html_panierbtn.jsp">
+        <jsp:param name="page_prec" value="menu.jsp"/>
+    </jsp:include>
     <div class="row">
         <div class="col-md-12">
             <div class="row">
@@ -33,7 +38,7 @@
                         <button type="submit" class="btn btn-success" name="action" value="ACHATS">
                             Achats
                         </button>
-                        <button type="submit" class="btn btn-success" name="action" value="PROMO">
+                        <button type="submit" class="btn btn-success" name="action" value="PROMO_INIT">
                             Promotions à ne pas rater
                         </button>
                         <button type="submit" class="btn btn-secondary" name="action" value="TERMINER">
