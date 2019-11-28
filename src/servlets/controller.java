@@ -568,6 +568,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     ArrayList<Traversees> listTravPLTR = new ArrayList<>();
 
                     System.out.println("Liste de last minutes d'auj :");
+                    double prix;
                     for (String str : tokens)
                     {
 
@@ -576,7 +577,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                         trav.set_idTraversees(oneTravSplit[1]);
                         trav.set_heureDep(oneTravSplit[2]);
                         trav.set_destination(oneTravSplit[3]);
-                        trav.set_prix(oneTravSplit[4]);
+                        prix = Double.parseDouble(oneTravSplit[4]) * 0.8;
+                        trav.set_prix(String.format("%.0f", prix));
 
                         listTravPLTR.add(trav);
                     }

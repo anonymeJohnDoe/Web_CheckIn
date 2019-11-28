@@ -92,7 +92,7 @@
                                         Destination
                                     </th>
                                     <th>
-                                        Prix
+                                        Prix (-20%)
                                     </th>
                                     <th>
                                         Panier
