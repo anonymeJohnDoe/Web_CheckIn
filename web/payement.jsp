@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Payement</title>
+    <%@ include file="/html_style.jsp" %>
 </head>
 <body>
 

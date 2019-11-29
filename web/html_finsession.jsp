@@ -10,6 +10,8 @@
 <head>
     <meta http-equiv="refresh" content="2;url=${pageContext.request.contextPath}/login.jsp" />
     <title>Merci pour votre visite</title>
+    <%@ include file="/html_style.jsp" %>
+
 </head>
 <body>
 <div style="text-align: center;">

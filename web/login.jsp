@@ -9,6 +9,8 @@
 <html>
 <head>
     <title>Login</title>
+    <%@ include file="/html_style.jsp" %>
+
 </head>
 <body>
 <div style="text-align: center;">

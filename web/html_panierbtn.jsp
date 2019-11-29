@@ -18,8 +18,8 @@
             <div class="col-md-2">
                 <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
 
-                        <input type="hidden" name="page_prec" value="${param.page_prec}"/>
-                        <button type="submit" class="btn btn-outline-info btn-lg btn-block" name="action" value="PANIER">
+                    <input type="hidden" name="page_prec" value="${param.page_prec}"/>
+                    <button type="submit" class="btn btn-outline-info btn-lg btn-block" name="action" id="btn_panier" value="PANIER">
                         PANIER
                     </button>
                 </form>

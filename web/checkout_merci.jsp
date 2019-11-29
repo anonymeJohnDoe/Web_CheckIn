@@ -2,18 +2,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
-
-
-<% %>
-<% %>
-
 <html>
 <head>
     <title>Merci pour votre visite</title>
     <meta http-equiv="refresh" content="2;url=${pageContext.request.contextPath}/menu.jsp" />
 
-    <style>
-    </style>
+    <%@ include file="/html_style.jsp" %>
+
 </head>
 <body>
 <div style="text-align: center;">

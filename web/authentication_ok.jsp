@@ -9,6 +9,8 @@
 <html>
 <head>
     <title>Authentication successful</title>
+    <%@ include file="/html_style.jsp" %>
+
 </head>
 <body>
 <div style="text-align: center;">

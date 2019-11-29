@@ -1,15 +1,11 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<% %>
-<% %>
-
 <html>
 <head>
     <title>Confirmation</title>
-    <style>
+    <%@ include file="/html_style.jsp" %>
 
-    </style>
 </head>
 <body>
 <!-- Verifier si client est connecte : -->

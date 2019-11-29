@@ -3,14 +3,14 @@
 <html>
 <head>
     <title>Checkout page</title>
-    <style>
+    <%@ include file="/html_style.jsp" %>
 
-    </style>
 </head>
 <body>
 <!-- Verifier si client est connecte : -->
 <% String numCl = (String)session.getAttribute("numCl"); %>
 <% int somme_Total = (int)session.getAttribute("somme_Total"); %>
+
 <% if(numCl != null) { %>
 <div style="text-align: center;">
     <div class="container-fluid">
@@ -31,6 +31,15 @@
                     <div class="col-md-2">
                     </div>
                     <div class="col-md-8">
+                        <h3 style="color: #f70025;">
+                            <% String erreur = (String)session.getAttribute("erreur"); %>
+                            <% if(erreur != null && erreur.equals("CARTE_INVALIDE")) { %>
+                                ERREUR : Le numero de carte est invalide
+                            <% } else if(erreur != null && erreur.equals("FOND_INSUFFISANT")){%>
+                                ERREUR : Le montant depasse les fonds sur la carte
+                            <% } else { } %>
+                        </h3>
+
                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                             <div class="form-group">
 
@@ -50,7 +59,7 @@
                                     Total : <%=somme_Total%>
                             </div>
                             <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_MERCI"> Continuer </button>
+                                <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_MERCI"> Continuer </button>
                             <button type="submit" class="btn btn-success" name="action" value="CHECKOUT_RET_PANIER"> Revenir au panier </button></P>
                         </form>
 

@@ -1,31 +1,15 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="DataClass.Traversees" %>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%  ArrayList<Traversees> listTrav = new ArrayList<>(); %>
 <%  String action = (String)session.getAttribute("action"); %>
 
 
-<% %>
-<% %>
 
 <html>
 <head>
     <title>Promotions</title>
-    <style>
-        table {
-            border: 1px solid black;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        td, th {
-            border: 1px solid black;
-            text-align: left;
-            padding: 8px;
-        }
-        tr:nth-child(even) {background-color: #f2f2f2;}
-    </style>
+    <%@ include file="/html_style.jsp" %>
 </head>
 <body>
 <!-- Verifier si client est connecte : -->
@@ -127,8 +111,8 @@
                                                         <input type="hidden" name="traverseesId" value="<%=listTrav.get(i).get_idTraversees()%>"/>
                                                         <input type="hidden" name="prix" value="<%=listTrav.get(i).get_prix()%>"/>
                                                         <input type="hidden" name="page_prec" value="promotions.jsp"/>
-                                                        <button type="submit" class="btn btn-success" name="action" value="ADD_PANIER">
-                                                            Panier
+                                                        <button type="submit" class="btn btn-success" id="btn_add" name="action" value="ADD_PANIER">
+                                                            Add
                                                         </button>
                                                     </form>
                                                 </td>

@@ -1,13 +1,8 @@
 <%@ page import="DataClass.Traversees" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="DataClass.Panier" %><%--
-  Created by IntelliJ IDEA.
-  User: Anonyme
-  Date: 25/11/2019
-  Time: 09:42
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="DataClass.Panier" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 
 <%  ArrayList<Panier> list_Panier = new ArrayList<>(); %>
 <%  int somme_Total = 0; %>
@@ -15,33 +10,29 @@
 <%  String page_prec = (String)session.getAttribute("page_prec"); %>
 
 
+
 <html>
 <head>
     <title>Panier</title>
-    <style>
-        table {
-            border: 1px solid black;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        td, th {
-            border: 1px solid black;
-            text-align: left;
-            padding: 8px;
-        }
-        tr:nth-child(even) {background-color: #f2f2f2;}
-    </style>
+    <%@ include file="/html_style.jsp" %>
+
 </head>
 <body>
 <!-- Verifier si client est connecte : -->
 <% String numCl = (String)session.getAttribute("numCl"); %>
 <% if(numCl != null) { %>
-<h3>
-    Votre numero client : <%=numCl%>
-</h3>
+    <% if(!action.equals("GET_PANIER_FAIL")) { %>
+
 <div style="text-align: center;">
     <div class="container-fluid">
         <div class="row">
+            <h3>
+                Votre numero client : <%=numCl%>
+            </h3><br>
+        </div>
+
+            <div class="row">
+
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-2">
@@ -101,7 +92,7 @@
                                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                                             <input type="hidden" name="panierId" value="<%=list_Panier.get(i).get_id_panier()%>"/>
                                             <input type="hidden" name="numCli" value="<%=list_Panier.get(i).get_client_id()%>"/>
-                                            <button type="submit" class="btn btn-success" name="action" value="REMOVE_FROM_PANIER">
+                                            <button type="submit" class="btn btn-success"  id="btn_remove" name="action" value="REMOVE_FROM_PANIER">
                                                 Remove
                                             </button>
                                         </form>
@@ -149,7 +140,82 @@
         </div>
     </div>
 </div>
-<%-- end else --%>
-<% } %>
-</body>
+    <% } else {%>
+<h3>
+    Votre numero client : <%=numCl%>
+</h3>
+<div style="text-align: center;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-8">
+                        <h3>
+                            Voir Panier
+                        </h3>
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="text-align: center;">
+
+                            <h3 style="color: #64f792">Le panier est vide. Vous êtes invités d'aller sur une page des achats.</h3>
+
+                            <table class="table" >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            ID Panier
+                                        </th>
+                                        <th>
+                                            Traversees ID
+                                        </th>
+                                        <th>
+                                            Client ID
+                                        </th>
+                                        <th>
+                                            Prix
+                                        </th>
+                                        <th>
+                                            Remove
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-active">
+                                        <td> - </td>
+                                        <td> - </td>
+                                        <td> - </td>
+                                        <td> - </td>
+                                        <td> - </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
+                                <input type="hidden" name="page_prec" value="${param.page_prec}"/>
+                                <P><button type="submit" class="btn btn-success" name="action" value="PANIER_RETOUR">
+                                        Retour a la page précédente
+                                </button></P>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <% } %>
+<% } else {%>
+<!-- si client pas connecté : -->
+<!-- Afficher page d'erreur   -->
+<%@ include file="/session_expired.jsp" %>
+
+<% } %> <%-- end else --%></body>
 </html>

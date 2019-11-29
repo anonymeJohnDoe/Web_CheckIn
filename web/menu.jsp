@@ -9,16 +9,18 @@
 <html>
 <head>
     <title>Menu</title>
+    <%@ include file="/html_style.jsp" %>
+
 </head>
 <body>
-    <!-- Verifier si client est connecte : -->
+<!-- Verifier si client est connecte : -->
 <% String numCl = (String)session.getAttribute("numCl"); %>
 <% if(numCl != null) { %>
 
 <div style="text-align: center;">
 <div class="container-fluid">
-    <!-- Bouton panier   -->
-    <%--@ include file="/html_panierbtn.jsp" --%>
+<!-- Bouton panier   -->
+<%--@ include file="/html_panierbtn.jsp" --%>
     <jsp:include page="/html_panierbtn.jsp">
         <jsp:param name="page_prec" value="menu.jsp"/>
     </jsp:include>
@@ -28,7 +30,7 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-6">
-                    <h3>
+                    <h3 id="titre">
                         Votre numero client : <%=numCl%>
                     </h3>
                     <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">

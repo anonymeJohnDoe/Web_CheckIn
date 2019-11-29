@@ -10,9 +10,8 @@
   <head>
     <title>Bienvenue muchachos</title>
     <meta http-equiv="refresh" content="0; url=login.jsp" />
-<%--    <script type="text/javascript">--%>
-<%--      window.location.href = "login.jsp"--%>
-<%--    </script>--%>
+    <%@ include file="/html_style.jsp" %>
+
   </head>
   <body>
   <h1>Redirection automatique... (<a href="login.jsp">click me</a>)</h1>
