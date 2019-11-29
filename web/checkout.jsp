@@ -10,6 +10,7 @@
 <body>
 <!-- Verifier si client est connecte : -->
 <% String numCl = (String)session.getAttribute("numCl"); %>
+<% int somme_Total = (int)session.getAttribute("somme_Total"); %>
 <% if(numCl != null) { %>
 <div style="text-align: center;">
     <div class="container-fluid">
@@ -33,27 +34,6 @@
                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                             <div class="form-group">
 
-                                <label for="nbPass">
-                                    Nombre de passager (sans conducteur) :
-                                </label>
-                                <input align="right" type="number" class="form-control" name="nbPass" id="nbPass">
-                            </div>
-                            <div class="form-group">
-
-                                <label for="adresse">
-                                    Adresse :
-                                </label>
-                                <input align="right" type="text" class="form-control" name="adresse" id="adresse">
-                            </div>
-                            <div class="form-group">
-
-                                <label for="numTel">
-                                    Numéro de GSM :
-                                </label>
-                                <input align="right" type="text" class="form-control" name="numTel" id="numTel">
-                            </div>
-                            <div class="form-group">
-
                                 <label for="numCarte">
                                     Numéro carte bancaire :
                                 </label>
@@ -66,8 +46,11 @@
                                 </label>
                                 <input align="right" type="text" class="form-control" name="dateExp" id="dateExp">
                             </div>
-
-                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_CONFIRM"> Continuer </button>
+                            <div>
+                                    Total : <%=somme_Total%>
+                            </div>
+                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
+                            <P><button type="submit" class="btn btn-success" name="action" value="CHECKOUT_MERCI"> Continuer </button>
                             <button type="submit" class="btn btn-success" name="action" value="CHECKOUT_RET_PANIER"> Revenir au panier </button></P>
                         </form>
 

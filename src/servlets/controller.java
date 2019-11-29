@@ -194,31 +194,31 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     redirectSurPage("checkout.jsp", req, resp);
 
                     break;
-                case "CHECKOUT_CONFIRM" :
-
-                    System.out.println("Dans CHECKOUT_CONFIRM");
-
-                    // TODO : compter nb res, compter prix total
-                    int nbRes = 0;
-                    int prixTotal = 777;
-
-                    // Redirect sur page confirmation achats
-                    session.setAttribute("nbRes", nbRes);
-                    session.setAttribute("prixTotal", prixTotal);
-                    redirectSurPage("checkout_confirm.jsp", req, resp);
-
-                    break;
-
 
                 case "CHECKOUT_MERCI" :
                     System.out.println("Dans CHECKOUT_MERCI");
 
-                    // TODO : envoyer requete d'achat au serveur
+
+                    System.out.println("Dans LOGIN_NEW_FORM");
+                    String numCarte = req.getParameter("numCarte");
+                    String dateExp = req.getParameter("dateExp");
+                    String somme = Integer.toString((int)session.getAttribute("somme_Total"));
+                    String idclient = (String)session.getAttribute("numCl");
 
 
-                    // Redirect sur page confirmation achats
-//                    session.setAttribute("nbRes", nbRes);
-//                    session.setAttribute("prixTotal", prixTotal);
+                    // Envoyer requete au serveur : chercher les traversees pour date donnee
+                    _arrayOfArg.clear();
+                    _arrayOfArg.add(numCarte);
+                    _arrayOfArg.add(dateExp);
+                    _arrayOfArg.add(somme);
+                    _arrayOfArg.add(idclient);
+                    requestADC = MakeRequest("PAYEMENT", _arrayOfArg, true);
+                    System.out.println("Requete : " + requestADC);
+                    responseADC = SendRequest(requestADC);
+                    System.out.println("Reponse serveur : *" + responseADC + "*");
+                    AnalyseReponse("PAYEMENT", responseADC, req, resp, session);
+
+
                     redirectSurPage("checkout_merci.jsp", req, resp);
                     break;
 
@@ -326,9 +326,6 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     break;
 
-                case "PAYEMENT" :
-
-                    break;
 //                case "TERMINER_FORM" :
 //                    System.out.println("Dans TERMINER_FORM");
 //
@@ -602,6 +599,10 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                 break;
+
+            case "PAYEMENT":
+
+                break;
             default:
                 response = "Commande inconnue";
                 break;
@@ -686,7 +687,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
         {
             System.getProperty("user.dir");
             // recup user.dir
-            _InStream = new FileInputStream("C:\\Users\\stasy\\Desktop\\RTI\\Labo\\Evaluation3\\Web_CheckIn\\resources\\config.properties");
+            _InStream = new FileInputStream("D:\\Workspace\\Git\\Web_CheckIn\\resources\\config.properties");
             _propFile.load(_InStream);
             _port = Integer.parseInt(_propFile.getProperty("PORT"));
             _host = _propFile.getProperty("HOST");

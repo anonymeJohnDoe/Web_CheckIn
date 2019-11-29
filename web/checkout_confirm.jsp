@@ -36,6 +36,7 @@
                     <div class="col-md-8">
                         <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
                                 <%  int prixTotal = (int)session.getAttribute("somme_Total"); %>
+                                <%  String cardNumber = (String)session.getAttribute("cardNumber"); %>
                                 <label>Total a payer :</label>
                                 <h3><%=prixTotal%></h3>
 

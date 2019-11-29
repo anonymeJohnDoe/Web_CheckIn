@@ -3,10 +3,6 @@
 
 
 
-<%  int nbRes = (int)session.getAttribute("nbRes"); %>
-<%  int prixTotal = (int)session.getAttribute("prixTotal"); %>
-
-
 
 <% %>
 <% %>
