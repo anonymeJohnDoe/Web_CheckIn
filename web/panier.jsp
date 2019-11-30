@@ -4,10 +4,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
+<%  ArrayList<Panier> list_Panier = new ArrayList<>(); %>
 <%  int somme_Total = 0; %>
 <%  String result = (String)session.getAttribute("result"); %>
 <%  String page_prec = (String)session.getAttribute("page_prec"); %>
-<% ArrayList<Panier> list_Panier = (ArrayList<Panier>) session.getAttribute("panier");%>
 
 
 
@@ -71,6 +71,8 @@
                                 <tbody>
                                 <%-- Boucle : afficher les  traversees --%>
                                 <%  if(result != null && result.equals("GET_PANIER_OK")) {%>
+
+                                <% list_Panier = (ArrayList<Panier>) session.getAttribute("list_Panier");%>
 
                                 <% if(list_Panier != null) { for( int i=0; i< list_Panier.size(); i++) { %>
                                 <tr class="table-active">

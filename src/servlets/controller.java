@@ -481,7 +481,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                     // 2. Sauvegarder liste dans objet session
-                    session.setAttribute("panier", list_Panier);
+                    session.setAttribute("list_Panier", list_Panier);
                     session.setAttribute("result", "GET_PANIER_OK");
 
                     // 2. Redirect sur menu
