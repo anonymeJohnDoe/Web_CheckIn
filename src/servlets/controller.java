@@ -296,7 +296,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     // Redirect sur page prec
                     session.setAttribute("ajoutPanier","NAVIRE_IS_FULL");
                     String page_prec = req.getParameter("page_prec");
-                    redirectSurPage(page_prec, req, resp);
+                    //redirectSurPage(page_prec, req, resp);
+                    redirectSurPage("menu.jsp", req, resp);
 
 
                     break;
@@ -436,7 +437,9 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     session.setAttribute("ajoutPanier","ACK");
                     String page_prec = req.getParameter("page_prec");
-                    redirectSurPage(page_prec, req, resp);
+                    //redirectSurPage(page_prec, req, resp);
+                    redirectSurPage("achats.jsp", req, resp);
+
 
                 } else {
 
@@ -445,7 +448,9 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     // Redirect sur page prec
                     session.setAttribute("ajoutPanier","NAVIRE_IS_FULL");
                     String page_prec = req.getParameter("page_prec");
-                    redirectSurPage(page_prec, req, resp);
+                    //redirectSurPage(page_prec, req, resp);
+                    redirectSurPage("achats.jsp", req, resp);
+
                 }
 
 
@@ -483,7 +488,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
                     // 2. Sauvegarder liste dans objet session
-                    session.setAttribute("list _Panier", list_Panier);
+                    session.setAttribute("list_Panier", list_Panier);
                     session.setAttribute("result", "GET_PANIER_OK");
 
                     // 2. Redirect sur menu

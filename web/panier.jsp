@@ -10,7 +10,6 @@
 <%  String page_prec = (String)session.getAttribute("page_prec"); %>
 
 
-
 <html>
 <head>
     <title>Panier</title>
@@ -72,34 +71,34 @@
                                 <%-- Boucle : afficher les  traversees --%>
                                 <%  if(result != null && result.equals("GET_PANIER_OK")) {%>
 
-                                <% list_Panier = (ArrayList<Panier>) session.getAttribute("list_Panier");%>
+                                    <%  list_Panier = (ArrayList<Panier>) session.getAttribute("list_Panier");%>
 
-                                <% if(list_Panier != null) { for( int i=0; i< list_Panier.size(); i++) { %>
-                                <tr class="table-active">
-                                    <td>
-                                        <%=list_Panier.get(i).get_id_panier() %>
-                                    </td>
-                                    <td>
-                                        <%=list_Panier.get(i).get_traversee_id() %>
-                                    </td>
-                                    <td>
-                                        <%=list_Panier.get(i).get_client_id() %>
-                                    </td>
-                                    <td>
-                                        <%=list_Panier.get(i).get_prix() %>
-                                    </td>
-                                    <td>
-                                        <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
-                                            <input type="hidden" name="panierId" value="<%=list_Panier.get(i).get_id_panier()%>"/>
-                                            <input type="hidden" name="numCli" value="<%=list_Panier.get(i).get_client_id()%>"/>
-                                            <button type="submit" class="btn btn-success"  id="btn_remove" name="action" value="REMOVE_FROM_PANIER">
-                                                Remove
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                    <%  for( int i=0; i< list_Panier.size(); i++) { %>
+                                    <tr class="table-active">
+                                        <td>
+                                            <%=list_Panier.get(i).get_id_panier() %>
+                                        </td>
+                                        <td>
+                                            <%=list_Panier.get(i).get_traversee_id() %>
+                                        </td>
+                                        <td>
+                                            <%=list_Panier.get(i).get_client_id() %>
+                                        </td>
+                                        <td>
+                                            <%=list_Panier.get(i).get_prix() %>
+                                        </td>
+                                        <td>
+                                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">
+                                                <input type="hidden" name="panierId" value="<%=list_Panier.get(i).get_id_panier()%>"/>
+                                                <input type="hidden" name="numCli" value="<%=list_Panier.get(i).get_client_id()%>"/>
+                                                <button type="submit" class="btn btn-success" id="btn_remove" name="action" value="REMOVE_FROM_PANIER">
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
 
-                                <% } } %>
+                                    <% }  %>
                                 <% } else {%>
                                 <tr class="table-active">
                                     <td> - </td>
@@ -129,7 +128,7 @@
                                     CHECKOUT
                                 </button>
                                 <button type="submit" class="btn btn-success" name="action" value="PANIER_RETOUR">
-                                    Retour a la page précédente
+                                    Retour menu
                                 </button></P>
 
                             </form>
@@ -167,7 +166,7 @@
                     <div class="col-md-12">
                         <div style="text-align: center;">
 
-                            <h3 style="color: #0049f7">Le panier est vide. Vous êtes invités d'aller sur une page des achats.</h3>
+                            <h3 style="color: #0049f7">Le panier est vide. Vous êtes invités d'aller sur une page des achats.</h3><br>
 
                             <table class="table" >
                                 <thead>
