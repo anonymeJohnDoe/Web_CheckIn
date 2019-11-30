@@ -2,7 +2,7 @@
 <%@ page import="DataClass.Traversees" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%  ArrayList<Traversees> listTrav = new ArrayList<>(); %>
-<%  String action = (String)session.getAttribute("action"); %>
+<%  String result = (String)session.getAttribute("result"); %>
 
 
 
@@ -58,7 +58,7 @@
                         <div style="text-align: center;">
                             <P></P>
                             <h3 style="display: inline; border: 1px solid black;">
-                                <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
+                                <%  if(result != null && result.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
 
                                 <% } else {%>
                                 Veuillez choisir une date où il y a des traversees enregistrees
@@ -89,7 +89,7 @@
                                 </thead>
                                 <tbody>
                                     <%-- Boucle : afficher les  traversees --%>
-                                    <%  if(action != null && action.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
+                                    <%  if(result != null && result.equals("ACHATS_LISTE_TRAV_TROUV")) {%>
 
                                         <% listTrav = (ArrayList<Traversees>) session.getAttribute("listTrav");%>
 
@@ -133,14 +133,9 @@
                                         <td> - </td>
                                     </tr>
                                     <% } %>
-
                                 </tbody>
                             </table>
-<%--                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">--%>
-<%--                                <button type="submit" class="btn btn-success" name="action" value="PANIER">--%>
-<%--                                    Voir Panier--%>
-<%--                                </button>--%>
-<%--                            </form>--%>
+
                         </div>
                     </div>
                 </div>

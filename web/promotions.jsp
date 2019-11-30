@@ -2,7 +2,7 @@
 <%@ page import="DataClass.Traversees" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%  ArrayList<Traversees> listTrav = new ArrayList<>(); %>
-<%  String action = (String)session.getAttribute("action"); %>
+<%  String result = (String)session.getAttribute("result"); %>
 
 
 
@@ -54,7 +54,7 @@
                         <div style="text-align: center;">
                             <P></P>
                             <h3 style="display: inline; border: 1px solid black;">
-                                <%  if(action != null && action.equals("PROMO_LISTE_TRAV_TROUV")) {%>
+                                <%  if(result != null && result.equals("PROMO_LISTE_TRAV_TROUV")) {%>
                                 Liste des Last Minutes :
                                 <% } else {%>
                                 Pas de promotions pour aujourd'hui, revenez demain :D
@@ -85,7 +85,7 @@
                                 </thead>
                                 <tbody>
                                     <%-- Boucle : afficher les  traversees --%>
-                                    <%  if(action != null && action.equals("PROMO_LISTE_TRAV_TROUV")) {%>
+                                    <%  if(result != null && result.equals("PROMO_LISTE_TRAV_TROUV")) {%>
 
                                         <% listTrav = (ArrayList<Traversees>) session.getAttribute("listTrav");%>
 
@@ -132,11 +132,6 @@
 
                                 </tbody>
                             </table>
-<%--                            <form method="POST" action="${pageContext.request.contextPath}/servlets/Controller">--%>
-<%--                                <button type="submit" class="btn btn-success" name="action" value="PANIER">--%>
-<%--                                    Voir Panier--%>
-<%--                                </button>--%>
-<%--                            </form>--%>
                         </div>
                     </div>
                 </div>

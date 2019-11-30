@@ -79,7 +79,6 @@ public class controller extends HttpServlet implements HttpSessionListener {
             switch (action) {
                 case "LOGIN_VERIFY":
                     System.out.println("Dans LOGIN_VERIFY");
-                    sc.log("LOGIN_VERIFY");
 
                     // 1. Recup num login entre :
                     int num_client = Integer.parseInt(req.getParameter("numcli"));
@@ -111,6 +110,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     break;
                 case "LOGIN_NEW_FORM" :
                     System.out.println("Dans LOGIN_NEW_FORM");
+
                     String nom_client = req.getParameter("nomcli");
                     String prenom_client = req.getParameter("prenomcli");
                     String adr_client = req.getParameter("adrcli");
@@ -132,6 +132,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     break;
                 case "MENU_ERR_LOGIN" :
+                    System.out.println("Dans MENU_ERR_LOGIN");
+
 
                     // Redigiger sur la page login de base, terminer session :
                     System.out.println("/!\\ Suppression de la session en cours... ");
@@ -181,9 +183,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 case "CHECKOUT_RET_PANIER" :
                     System.out.println("Dans CHECKOUT_RET_PANIER");
 
-                    System.out.println("page_prec=" + session.getAttribute("page_prec"));
+                    System.out.println("page_prec=" + req.getParameter("page_prec"));
 
-                    req.setAttribute("page_prec", session.getAttribute("page_prec"));
                     redirectSurPage("panier.jsp", req, resp);
 
 
@@ -191,9 +192,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 case "CHECKOUT" :
                     System.out.println("Dans CHECKOUT");
 
-                    System.out.println("page_prec=" + session.getAttribute("page_prec"));
+                    System.out.println("page_prec=" + req.getParameter("page_prec"));
 
-                    req.setAttribute("page_prec", session.getAttribute("page_prec"));
                     redirectSurPage("checkout.jsp", req, resp);
 
                     break;
@@ -291,18 +291,17 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 case "PANIER_RETOUR" :
                     System.out.println("Dans PANIER_RETOUR");
 
-                    System.out.println("page_prec=" + session.getAttribute("page_prec"));
+                    System.out.println("page_prec=" + req.getParameter("page_prec"));
 
                     // Redirect sur page prec
                     session.setAttribute("ajoutPanier","NAVIRE_IS_FULL");
-                    String page_prec = (String)session.getAttribute("page_prec");
+                    String page_prec = req.getParameter("page_prec");
                     redirectSurPage(page_prec, req, resp);
 
 
                     break;
 
                 case "REMOVE_FROM_PANIER":
-
                     System.out.println("Dans REMOVE_FROM_PANIER");
 
 
@@ -335,11 +334,13 @@ public class controller extends HttpServlet implements HttpSessionListener {
         String tokfull = response.replaceAll(".$", "");
         String[] tok = tokfull.split(_separator);
         String rep = tok[0];
-        System.out.println(rep);
+        System.out.println("tokfull = " + tokfull);
 
         switch(cmd)
         {
             case "LOGIN_VERIFY":
+                System.out.println("Dans LOGIN_VERIFY(AnalyseReponse)");
+
                 if(rep.equals("ACK")) {
                     System.out.println("Client trouve");
 
@@ -356,13 +357,15 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Ce numero de client n'existe pas");
 
                     // Output
-                    session.setAttribute("action", "LOGIN_FAIL");
+                    session.setAttribute("result", "LOGIN_FAIL");
 
                     redirectSurPage("login.jsp", req, resp);
                 }
 
                 break;
             case "LOGIN_GENERATE" :
+                System.out.println("Dans LOGIN_GENERATE(AnalyseReponse)");
+
                 if(rep.equals("ACK"))
                 {
                     // recuperer numclient du serveur
@@ -378,6 +381,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                 break;
             case "ACHATS_LISTE_TRAV_RECH" :
+                System.out.println("Dans ACHATS_LISTE_TRAV_RECH(AnalyseReponse)");
+
                 if(rep.equals("ACK"))
                 {
 
@@ -409,19 +414,21 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.setAttribute("listTrav", listTravALTR);
 
                     // 3. Redirect sur achats
-                    session.setAttribute("action","ACHATS_LISTE_TRAV_TROUV");
+                    session.setAttribute("result","ACHATS_LISTE_TRAV_TROUV");
                     redirectSurPage("achats.jsp", req, resp);
 
                 }
                 else {
                     System.out.println("Pas de traversees trouvees");
                     // Redirect sur page prec
-                    session.setAttribute("action","ACHATS_LISTE_TRAV_VIDE");
+                    session.setAttribute("result","ACHATS_LISTE_TRAV_VIDE");
                     redirectSurPage("achats.jsp", req, resp);
                 }
 
                 break;
             case "ADD_PANIER":
+                System.out.println("Dans ADD_PANIER(AnalyseReponse)");
+
                 if(rep.equals("ACK"))
                 {
 
@@ -440,8 +447,11 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     String page_prec = req.getParameter("page_prec");
                     redirectSurPage(page_prec, req, resp);
                 }
+
+
                 break;
             case "PANIER" :
+                System.out.println("Dans PANIER(AnalyseReponse)");
 
                 if(rep.equals("ACK")) {
                     String tokenP = tokfull.replaceAll("ACK", "");
@@ -456,6 +466,8 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     {
 
                         String[] onePanierSplit = str.split(";");
+                        //System.out.println("onePanierSplit[1]=" + onePanierSplit[1]);
+
                         Panier panier = new Panier();
                         panier.set_id_panier(onePanierSplit[1]);
                         panier.set_traversee_id(onePanierSplit[2]);
@@ -465,15 +477,18 @@ public class controller extends HttpServlet implements HttpSessionListener {
                         list_Panier.add(panier);
 
                     }
+                    System.out.println("Liste panier=" + list_Panier.get(0).get_traversee_id());
+                    System.out.println("Liste panier=" + list_Panier.get(1).get_traversee_id());
+
+
 
                     // 2. Sauvegarder liste dans objet session
                     session.setAttribute("list _Panier", list_Panier);
-                    session.setAttribute("action", "GET_PANIER_OK");
+                    session.setAttribute("result", "GET_PANIER_OK");
 
                     // 2. Redirect sur menu
                     System.out.println("---Valeur page_prec=" + req.getParameter("page_prec"));
 
-                    session.setAttribute("page_prec", req.getParameter("page_prec"));
                     redirectSurPage("panier.jsp", req, resp);
 
 
@@ -481,7 +496,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Erreur fetching panier");
 
                     // Output
-                    session.setAttribute("action", "GET_PANIER_FAIL");
+                    session.setAttribute("result", "GET_PANIER_FAIL");
 
                     redirectSurPage("panier.jsp", req, resp);
                 }
@@ -492,6 +507,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
 
             case "REMOVE_FROM_PANIER":
+                System.out.println("Dans REMOVE_FROM_PANIER(AnalyseReponse)");
 
                 if(rep.equals("ACK")) {
                     String tokenn = tokfull.replaceAll("ACK", "");
@@ -519,7 +535,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
 
                     // 2. Sauvegarder liste dans objet session
                     session.setAttribute("list_Panier", list_Panier);
-                    session.setAttribute("action", "GET_PANIER_OK");
+                    session.setAttribute("result", "GET_PANIER_OK");
 
                     // 2. Redirect sur menu
                     redirectSurPage("panier.jsp", req, resp);
@@ -529,15 +545,16 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     System.out.println("Erreur removing item from panier");
 
                     // Output
-                    session.setAttribute("action", "REMOVE_ITEM_PANIER_FAIL");
+                    session.setAttribute("result", "REMOVE_ITEM_PANIER_FAIL");
 
-                    redirectSurPage("error.jsp", req, resp);
+                    redirectSurPage("panier.jsp", req, resp);
                 }
-
 
                 break;
 
             case "PROMO_LISTE_TRAV_RECH" :
+                System.out.println("Dans PROMO_LISTE_TRAV_RECH(AnalyseReponse)");
+
                 if(rep.equals("ACK"))
                 {
                     String tokenPLTR = tokfull.replaceAll("ACK", "");
@@ -567,14 +584,14 @@ public class controller extends HttpServlet implements HttpSessionListener {
                     session.setAttribute("listTrav", listTravPLTR);
 
                     // 3. Redirect sur achats
-                    session.setAttribute("action","PROMO_LISTE_TRAV_TROUV");
+                    session.setAttribute("result","PROMO_LISTE_TRAV_TROUV");
                     redirectSurPage("promotions.jsp", req, resp);
 
                 }
                 else {
                     System.out.println("Pas de traversees trouvees");
                     // Redirect sur achats
-                    session.setAttribute("action","PROMO_LISTE_TRAV_VIDE");
+                    session.setAttribute("result","PROMO_LISTE_TRAV_VIDE");
                     redirectSurPage("promotions.jsp", req, resp);
                 }
 
@@ -582,6 +599,9 @@ public class controller extends HttpServlet implements HttpSessionListener {
                 break;
 
             case "PAYEMENT":
+                System.out.println("Dans PAYEMENT(AnalyseReponse)");
+
+
                 if(rep.equals("ACK"))
                 {
 

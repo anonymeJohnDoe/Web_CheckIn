@@ -29,8 +29,8 @@
     </button></P>
 
     <h3 style="color:red;">
-        <% String action = (String)session.getAttribute("action"); %>
-        <% if(action != null && action.equals("LOGIN_FAIL")) {%>
+        <% String result = (String)session.getAttribute("result"); %>
+        <% if(result != null && result.equals("LOGIN_FAIL")) {%>
             Veuillez entrer un Client ID correct ou cliquer sur "Obtenir un nouveau"
         <% } %>
     </h3>

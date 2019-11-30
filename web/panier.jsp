@@ -6,7 +6,7 @@
 
 <%  ArrayList<Panier> list_Panier = new ArrayList<>(); %>
 <%  int somme_Total = 0; %>
-<%  String action = (String)session.getAttribute("action"); %>
+<%  String result = (String)session.getAttribute("result"); %>
 <%  String page_prec = (String)session.getAttribute("page_prec"); %>
 
 
@@ -21,7 +21,7 @@
 <!-- Verifier si client est connecte : -->
 <% String numCl = (String)session.getAttribute("numCl"); %>
 <% if(numCl != null) { %>
-    <% if(!action.equals("GET_PANIER_FAIL")) { %>
+    <% if(!result.equals("GET_PANIER_FAIL")) { %>
 
 <div style="text-align: center;">
     <div class="container-fluid">
@@ -70,11 +70,11 @@
                                 </thead>
                                 <tbody>
                                 <%-- Boucle : afficher les  traversees --%>
-                                <%  if(action != null && action.equals("GET_PANIER_OK")) {%>
+                                <%  if(result != null && result.equals("GET_PANIER_OK")) {%>
 
                                 <% list_Panier = (ArrayList<Panier>) session.getAttribute("list_Panier");%>
 
-                                <% for( int i=0; i< list_Panier.size(); i++) { %>
+                                <% if(list_Panier != null) { for( int i=0; i< list_Panier.size(); i++) { %>
                                 <tr class="table-active">
                                     <td>
                                         <%=list_Panier.get(i).get_id_panier() %>
@@ -99,7 +99,7 @@
                                     </td>
                                 </tr>
 
-                                <% } %>
+                                <% } } %>
                                 <% } else {%>
                                 <tr class="table-active">
                                     <td> - </td>
@@ -110,12 +110,16 @@
                                 </tr>
                                 <% } %>
                                 <%
-                                    for( int i=0; i< list_Panier.size(); i++) {
+                                    if(list_Panier != null)
+                                    {
+                                        for (int i = 0; i < list_Panier.size(); i++)
+                                        {
 
-                                        somme_Total += Integer.parseInt(list_Panier.get(i).get_prix());
+                                            somme_Total += Integer.parseInt(list_Panier.get(i).get_prix());
 
+                                        }
+                                        session.setAttribute("somme_Total", somme_Total);
                                     }
-                                    session.setAttribute("somme_Total", somme_Total);
                                 %>
                                 </tbody>
                             </table>
@@ -163,7 +167,7 @@
                     <div class="col-md-12">
                         <div style="text-align: center;">
 
-                            <h3 style="color: #64f792">Le panier est vide. Vous êtes invités d'aller sur une page des achats.</h3>
+                            <h3 style="color: #0049f7">Le panier est vide. Vous êtes invités d'aller sur une page des achats.</h3>
 
                             <table class="table" >
                                 <thead>
