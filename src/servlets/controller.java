@@ -477,13 +477,11 @@ public class controller extends HttpServlet implements HttpSessionListener {
                         list_Panier.add(panier);
 
                     }
-                    System.out.println("Liste panier=" + list_Panier.get(0).get_traversee_id());
-                    System.out.println("Liste panier=" + list_Panier.get(1).get_traversee_id());
 
 
 
                     // 2. Sauvegarder liste dans objet session
-                    session.setAttribute("list _Panier", list_Panier);
+                    session.setAttribute("panier", list_Panier);
                     session.setAttribute("result", "GET_PANIER_OK");
 
                     // 2. Redirect sur menu
@@ -717,7 +715,7 @@ public class controller extends HttpServlet implements HttpSessionListener {
         {
             System.getProperty("user.dir");
             // recup user.dir
-            _InStream = new FileInputStream("C:\\Users\\stasy\\Desktop\\RTI\\Labo\\Evaluation3\\Web_CheckIn\\resources\\config.properties");
+            _InStream = new FileInputStream("D:\\Workspace\\Git\\Web_CheckIn\\resources\\config.properties");
             _propFile.load(_InStream);
             _port = Integer.parseInt(_propFile.getProperty("PORT"));
             _host = _propFile.getProperty("HOST");
